@@ -1,8 +1,8 @@
 # hdlan-zoned
 Consists of 3 modules:
-1 Vue SPA
-2 app.js runs as Node Express server to handle API calls and serve index.html for Vue app
-3 NodeRedFlow . Node Red is also used for part of the server side API handling and SNMP to Cisco Switch
+1. Vue SPA
+2. app.js runs as Node Express server to handle API calls and serve index.html for Vue app
+3. NodeRedFlow . Node Red is also used for part of the server side API handling and SNMP to Cisco Switch
 
 
 > A Vue.js project
