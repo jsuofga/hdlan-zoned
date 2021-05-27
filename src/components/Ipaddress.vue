@@ -3,7 +3,24 @@
   <div class="ipaddress container">
      
       <form >
-            <h5>Cisco SG350 IP Address</h5>
+          <form id = 'switch-brand' action="#" >
+            <h5>Choose Switch Model </h5>
+            <p>
+              <label>
+                <input  @click= "pickSwitch('Cisco')" name="group1" type="radio"    />
+                <span>Cisco SG350</span>
+              </label>
+            </p>
+            <p>
+              <label>
+                <input  @click= "pickSwitch('Ubiquiti')" name="group1" type="radio"  />
+                <span>Ubiquiti Edge</span>
+              </label>
+            </p>
+          
+       </form>
+
+            <h5>{{switchPicked}} Network Switch IP Address</h5>
             <h6>{{snmpStatus.model}}</h6>
             <!-- <h6 class = 'red-text'>Re-power Cisco SG350 before proceeding </h6> -->
             <div class="field">
@@ -32,10 +49,16 @@ export default {
   data () {
     return {
         ipAddress : this.snmpStatus.SwitchIPAddress,
-        feedbackMessage: null
+        feedbackMessage: null,
+        switchPicked:''
     }
   },
   methods:{
+    pickSwitch(_type){
+        console.log(_type)
+        this.switchPicked = _type
+    },
+
     cancel(e){
         e.preventDefault()
         this.$router.push({name:'home'})
@@ -49,17 +72,18 @@ export default {
       if(this.ipAddress){
         this.$emit('msg-switchIp',{switchIp:this.ipAddress})
         // Save switch config to server
-        let sg350Config = {"ip":"","TXports":this.snmpStatus.txCount ,"RXports":this.snmpStatus.rxCount }  //
-        sg350Config['ip'] = this.ipAddress
+        let switchConfig = {"brand": "", "ip":"","TXports":this.snmpStatus.txCount ,"RXports":this.snmpStatus.rxCount }  //
+        switchConfig['brand'] = this.switchPicked
+        switchConfig['ip'] = this.ipAddress
         
-        //console.log(`http://${serverURL}/write/UserSwitchConfig/${JSON.stringify(sg350Config)}`)
-        fetch(`http://${serverURL}:3000/write/UserSwitchConfig/${JSON.stringify(sg350Config)}`)
+        console.log(`http://${serverURL}/write/UserSwitchConfig/${JSON.stringify(switchConfig)}`)
+        fetch(`http://${serverURL}:3000/write/UserSwitchConfig/${JSON.stringify(switchConfig)}`)
         .then(()=> {
           this.$router.push({name:'dashboard'})
         })
         .catch(error => console.log(error));
       }else{
-        this.feedbackMessage = "Enter IP address for Cisco SG350 Switch!"
+        this.feedbackMessage = `Enter IP address for ${this.switchPicked} Switch!`
       }
     },
   },
