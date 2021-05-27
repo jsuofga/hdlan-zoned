@@ -124,7 +124,7 @@ export default {
         },
         closeModal2(_input){
             if(_input == 'synch'){
-                alert('Please re-power Cisco switch before Synchronizing switch')
+                alert('Please re-power Network switch before Synchronizing switch')
                 this.modalInstance2.close();
             }else{
                 this.modalInstance2.close();
