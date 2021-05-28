@@ -66,8 +66,8 @@ export default {
 
     connect(e){
       e.preventDefault()
-      const serverURL = location.hostname
-      
+       const serverURL = location.hostname
+           
       //Save IP address of Cisco Switch to server
       if(this.ipAddress){
         this.$emit('msg-switchIp',{switchIp:this.ipAddress})
@@ -79,7 +79,13 @@ export default {
         console.log(`http://${serverURL}/write/UserSwitchConfig/${JSON.stringify(switchConfig)}`)
         fetch(`http://${serverURL}:3000/write/UserSwitchConfig/${JSON.stringify(switchConfig)}`)
         .then(()=> {
-          this.$router.push({name:'dashboard'})
+
+          if(this.switchPicked == 'Cisco'){
+            this.$router.push({name:'dashboard'})
+          }else if(this.switchPicked == 'Ubiquiti' ){
+            this.$router.push({name:'dashboardUbiquiti'})
+          }
+
         })
         .catch(error => console.log(error));
       }else{

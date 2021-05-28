@@ -47,6 +47,7 @@ import Status from '@/components/Status'
 import Name_inputs from '@/components/Name_inputs'
 import Name_outputs from '@/components/Name_outputs'
 import Dashboard from "@/components/Dashboard"
+import DashboardUbiquiti from "@/components/DashboardUbiquiti"
 import Timer from "@/components/Timer"
 import Capacitycontrol from "@/components/Capacitycontrol"
 import Update from "@/components/Update"
@@ -66,6 +67,7 @@ export default {
     Name_inputs,
     Name_outputs,
     Dashboard,
+    DashboardUbiquiti,
     Timer,
     Capacitycontrol,
     Update,
