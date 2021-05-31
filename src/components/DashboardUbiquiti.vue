@@ -49,6 +49,7 @@
     <button v-if= "showSaveButton" @click= "save" class="waves-effect waves-light btn-large blue" v-bind:disabled= "onOff"><i class="material-icons left">save</i>Save</button>
     <button v-else  @click= "cancel" class="waves-effect waves-light btn-large red"><i class="material-icons left">cancel</i>cancel</button>
 
+</div>
 
 </template>
 
