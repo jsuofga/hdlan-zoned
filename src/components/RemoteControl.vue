@@ -76,8 +76,12 @@ export default {
     unit: function () {
       return (Math.trunc(this.remote / 4) + 1)  // itach unit number ( 3 ports per unit)
     },
-    port:function () {
-      return ((this.remote % 3))  //itach port number
+    port:function () { //itach port number
+      if((this.remote % 3) != 0){
+        return ((this.remote % 3))  //itach port number
+      }else{
+        return (3)  //itach port number
+      }
     },
   },
   methods:{
