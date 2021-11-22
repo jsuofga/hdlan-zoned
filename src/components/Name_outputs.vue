@@ -10,10 +10,11 @@
           <div class = 'zoneSelect'>
               <p @click= "zoneSelect(item,index)" v-for="(item,index) in zoneNames" :key="index">
                   <label>
-                    <input name="group1" type="radio"  />
+                    <input name="group1" type="radio"/>
                     <span>{{item}}</span>
                   </label>
               </p>
+              
           </div>
         </div>
 
@@ -24,7 +25,7 @@
 
         <div class = 'listDiv'>
               <div class = "gridItem" v-for="(item,index) in tvNames" :key="index">
-                  <p>RX{{index+1}}</p>
+                  <p>RX{{index+1}} @ Port {{UserSwitchConfig.TXports + (index+1)}}</p>
                   <p>{{tvNames[index]}}</p>
                   <span class = "edit"><i class="material-icons modal-trigger" href="#modal3" v-on:click= "edit(index)">edit</i></span>
                   <small>Zone-{{zones[index]}}</small>
@@ -48,7 +49,7 @@
                   <div class = 'ModalzoneSelect'>
                     <p @click= "zoneSelect(item,index)" v-for="(item,index) in zoneNames" :key="index">
                         <label>
-                          <input name="group1" type="radio"  />
+                          <input name="group1" type="radio"/>
                           <span>{{item}}</span>
                         </label>
                     </p>
@@ -68,7 +69,7 @@
 
 export default {
     name: 'Name_outputs',
-    props:['zones','zonesId','zoneNames','tvNames','snmpStatus'],
+    props:['zones','zonesId','zoneNames','tvNames','UserSwitchConfig'],
     watch:{
     },
     data(){
@@ -79,7 +80,6 @@ export default {
         }
     },
     methods: {
-
       zoneSelect(item,index){
           // console.log('zoneSelect',index)
           this.zoneId = index+1
@@ -89,12 +89,12 @@ export default {
           this.$forceUpdate()
       },
       add(){
-        if(this.tvNames.length < this.snmpStatus.rxCount){
+          if(this.tvNames.length < this.UserSwitchConfig.RXports){
            this.tvNames.push(this.tvName)
            this.zones.push(this.zone)
            this.zonesId.push(this.zoneId)
            this.tvName = ''
-        //if inputs exceeds number of rxCount on switch
+          //if inputs exceeds number of rxCount on switch
         }else{
           alert('Exceeded number of RX ports')
           this.tvName  = ''
@@ -139,6 +139,7 @@ export default {
     mounted(){
         M.AutoInit() // For Materialize to work!
         window.scrollTo(0, 0) //Top of page
+      
     }
 }
 

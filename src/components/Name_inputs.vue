@@ -13,7 +13,7 @@
 
           <div class = 'listDiv'>
                    <div class = "gridItem" v-for="(item,index) in sourceNames" :key="index">
-                      <label v-bind:for= "sourceNames[index]">Input{{index+1}}.</label>
+                      <label v-bind:for= "sourceNames[index]">TX{{index+1}}</label>
                       <input class = 'inputFont' type="text" name = "sourceNames[index]" v-model= "sourceNames[index]" maxlength="10">
                       <span class = "trash"><i class="material-icons" v-on:click= "trash(index)">delete_forever</i></span>
                   </div>

@@ -34,7 +34,8 @@
 
 export default {
     name: 'Name_zones',
-    props:['zoneNames','tvNamesZones'],
+    //props:['zoneNames','tvNamesZones'],
+      props:['zones','zonesId','zoneNames','tvNames'],
    
     watch:{
       sourceNames: function() {
@@ -72,7 +73,22 @@ export default {
           this.zoneNames.forEach((item,index)=>{
              zoneInputNames[`zone${index+1}`] = item ;
           })
-         
+       
+          let tvNamesZones = []
+          this.tvNames.forEach((item,index)=>{
+             let tvAndzone = {rxId: index+1, name:item, zoneId: this.zonesId[index], zone:zoneInputNames[`zone${this.zonesId[index]}`]}
+             tvNamesZones.push(tvAndzone) 
+          })
+          
+          this.$emit('msg-tvNamesZonesUpdated', tvNamesZones)
+
+          //Send to Express to save in 'UserTvNames.txt'
+          fetch(`http://${serverURL}/write/UserTvNames/${JSON.stringify(tvNamesZones)}`)
+          .then((data)=>{
+
+          })
+          .catch(error => console.log(error));
+
           // Send to Express to save in 'UserZoneNames.txt'
           fetch(`http://${serverURL}/write/UserZoneNames/${JSON.stringify(zoneInputNames)}`)
           .then((data)=>{

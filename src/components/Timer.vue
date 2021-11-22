@@ -110,7 +110,8 @@ export default {
           //Read UserSwitchConfig
           const serverURL = location.hostname
               // Save switch config to server
-              let sg350Config = {"ip":"","TXports":"" ,"RXports":"","onTime":'',"offTime":''}  //
+              let sg350Config = {"model":"","ip":"","TXports":"" ,"RXports":"","onTime":'',"offTime":''}  //
+              sg350Config['model'] = this.snmpStatus.model
               sg350Config['ip'] = this.snmpStatus.SwitchIPAddress
               sg350Config['TXports'] = this.snmpStatus.txCount
               sg350Config['RXports'] = this.snmpStatus.rxCount
@@ -188,7 +189,8 @@ export default {
                   //Read UserSwitchConfig
                     const serverURL = location.hostname
                     // Save switch config to server
-                    let sg350Config = {"ip":"","TXports":"" ,"RXports":"","onTime":'',"offTime":''}  //
+                    let sg350Config = {"model":"","ip":"","TXports":"" ,"RXports":"","onTime":'',"offTime":''}  //
+                    sg350Config['model'] = this.snmpStatus.model
                     sg350Config['ip'] = this.snmpStatus.SwitchIPAddress
                     sg350Config['TXports'] = this.snmpStatus.txCount
                     sg350Config['RXports'] = this.snmpStatus.rxCount

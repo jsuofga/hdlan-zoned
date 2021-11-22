@@ -28,6 +28,7 @@
         v-bind:favChNames  = "favChNames" 
         v-bind:favChStations  = "favChStations" 
         v-bind:remote  = "remote" 
+        v-bind:UserSwitchConfig  = "UserSwitchConfig" 
      
     />
     <Status @msg-status= "status" @msg-sourceNamesUpdated= "sourceNamesUpdated" @msg-tvNamesZonesUpdated= "tvNamesZonesUpdated" @msg-pingController= "pingController" />
@@ -99,7 +100,8 @@ export default {
      stbQty: [], // Number of set top boxes to be controlled by Itach 
      favChNames:[], //
      favChStations:[], //
-     remote: '' // remote control selected
+     remote: '' ,// remote control selected
+     UserSwitchConfig: {} //UserSwitchConfig.txt
   }
 },
 
@@ -150,6 +152,7 @@ export default {
         this.get_UserPresets()
         this.get_UserItachIPs()
         this.get_UserFavChannels()
+        this.get_UserSwitchConfig()
     },
     get_zoneNames(){
          const serverURL = `${location.hostname}:3000`
@@ -214,8 +217,6 @@ export default {
             console.log('Success:', result);
              let item;
              for( item in result){
-               //console.log(item)
-               //console.log(result[item])
                this.sourceNames.push(result[item])
              }
               console.log(this.sourceNames)
@@ -233,8 +234,6 @@ export default {
                 fetch(`http://${serverURL}:3000/read/UserPreset${i+1}`,{method: 'GET',})
                 .then(response => response.json())
                 .then(result => {
-                  // console.log('Success:', result);
-                  //Check if Preset1,2,3 is empty.
                   if(Object.keys(result).length == 0){
                     this.userPresetsExist[i] = false
 
@@ -263,8 +262,6 @@ export default {
              for( item in result){
                this.itachIPs.push(result[item])
              }
-              // console.log('before slice',this.itachIPs)
-              // console.log('after slice',this.itachIPs.slice(0,-1))
               this.stbQty = [...this.itachIPs.slice(-1)]
               this.itachIPs = [...this.itachIPs.slice(0,-1)]
               
@@ -299,7 +296,20 @@ export default {
           
         console.log("names:", this.favChNames)
         console.log("stations:", this.favChStations)
-    }
+    },
+    get_UserSwitchConfig(){
+        const serverURL = `${location.hostname}:3000`
+        // Read from Server
+          fetch(`http://${serverURL}/read/UserSwitchConfig`, {method: 'GET',})
+          .then(response => response.json())
+          .then(result => {
+            console.log('Success:', result);
+            this.UserSwitchConfig = result
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+    },
 
   },
 

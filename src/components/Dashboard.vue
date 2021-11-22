@@ -16,8 +16,9 @@
           <div class = 'grid-item'><span><i class="material-icons small" style = "color:white">inbox</i></span>LAN</div>
       </div>
 
-     <div v-if= "snmpStatus.model !== ''" class = 'sg350'>
-        <div v-if= "is52Port" class = 'port1-48'>
+      <!-- SG350 series switch -->
+     <div v-if= "isSG350" class = 'sg350'>
+        <div v-if= "SG350_52p" class = 'port1-48'>
             <div class = 'grid-item'  v-for="(item, index) in portS" :key="index" ><i class="material-icons small " v-bind:style= "{color: portsColor[index],opacity: portsActive[index]}" >inbox</i>{{item+1}}</div>
         </div >  
         <div v-else class = 'port1-24'>
@@ -31,6 +32,42 @@
             <div class = 'grid-item'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+1],opacity: portsActive[portS.length+1]}" >crop_free</i>{{portS.length+2}}b</div>       
             <div class = 'grid-item'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+3],opacity: portsActive[portS.length+3]}" >crop_free</i>{{portS.length+4}}</div>       
         </div>
+     </div>
+      <!-- CBS 250/350 series switch -->
+     <div v-else class = 'cbs250_350'>
+        <div v-if= "cbs250_350_48p" class = 'cbs_port1-48'>
+            <div class = 'grid-item cbs-black'  v-for="(item, index) in portS" :key="index" ><i class="material-icons small " v-bind:style= "{color: portsColor[item-1],opacity: portsActive[item-1]}" >inbox</i>{{item}}</div>
+        </div >  
+        <div v-else-if = "cbs250_350_24p" class = 'cbs_port1-24'>
+            <div class = 'grid-item cbs-black'  v-for="(item, index) in portS" :key="index" ><i class="material-icons small " v-bind:style= "{color: portsColor[item-1],opacity: portsActive[item-1]}" >inbox</i>{{item}}</div>
+        </div > 
+        <div v-else-if = "cbs250_350_16p"   class = 'cbs_port1-16'>
+            <div class = 'grid-item cbs-black'  v-for="(item, index) in portS" :key="index" ><i class="material-icons small " v-bind:style= "{color: portsColor[item-1],opacity: portsActive[item-1]}" >inbox</i>{{item}}</div>
+        </div > 
+        <!-- SFP Ports -->
+        <div v-if = "cbs250_350_16p"  class = 'cbs_250_350-16p-sfp'>
+            <div class = 'grid-item hideMyAss'><i class="material-icons small " >crop_free</i>{{portS.length+1}}</div>       
+            <div class = 'grid-item hideMyAss'><i class="material-icons small " >crop_free</i>{{portS.length+2}}</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length],opacity: portsActive[portS.length]}" >crop_free</i>{{portS.length+1}}</div>       
+            <div class = 'grid-item cbs-black '><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+1],opacity: portsActive[portS.length+1]}" >crop_free</i>{{portS.length+2}}</div>       
+        </div>
+        <div v-else-if = "cbs250_350_24p"  class = 'cbs_250_350-24p-sfp'> 
+            <div class = 'grid-item hideMyAss'><i class="material-icons small " >crop_free</i>{{portS.length+1}}</div>       
+            <div class = 'grid-item hideMyAss'><i class="material-icons small " >crop_free</i>{{portS.length+2}}</div>       
+            <div class = 'grid-item hideMyAss'><i class="material-icons small " >crop_free</i>{{portS.length+3}}</div>       
+            <div class = 'grid-item hideMyAss'><i class="material-icons small " >crop_free</i>{{portS.length+4}}</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length],opacity: portsActive[portS.length]}" >crop_free</i>{{portS.length+1}}</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+1],opacity: portsActive[portS.length+1]}" >crop_free</i>{{portS.length+2}}</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+2],opacity: portsActive[portS.length+2]}" >crop_free</i>{{portS.length+3}}</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+3],opacity: portsActive[portS.length+3]}" >crop_free</i>{{portS.length+4}}</div>       
+        </div>
+        <div v-else  class = 'cbs_250_350-48p-sfp'>
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length],opacity: portsActive[portS.length]}">crop_free</i>SFP-49</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+2],opacity: portsActive[portS.length+2]}" >crop_free</i>SFP-51</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+1],opacity: portsActive[portS.length+1]}" >crop_free</i>SFP-50</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+3],opacity: portsActive[portS.length+3]}" >crop_free</i>SFP-52</div>       
+        </div>
+
      </div>
 
     <div id = 'progress-container'>
@@ -57,37 +94,55 @@ export default {
     return {
         completion: '0%',
         showSaveButton: true,
-        onOff: true
+        onOff: true,
+        SG350_52p: false,
+        cbs250_350_16p: false,
+        cbs250_350_24p: false,
+        cbs250_350_48p: false,
     }
   },
   computed:{
       portS: function(){
         let portS = ''
-        if(this.snmpStatus.model =='SG350-52P'){
-
+        if(this.snmpStatus.model.includes('SG350-52')){
           portS = [...Array(48).keys()] 
-  
-        }else{
+        }else if (this.snmpStatus.model.includes('SG350-28')){
           portS = [...Array(24).keys()] 
-        }
+        }else if (this.snmpStatus.model.includes('CBS250-48') || this.snmpStatus.model.includes('CBS350-48')){
+          portS = [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48] 
+        }else if (this.snmpStatus.model.includes('CBS250-24') || this.snmpStatus.model.includes('CBS350-24')){
+          portS = [1,3,5,7,9,11,13,15,17,19,21,23,2,4,6,8,10,12,14,16,18,20,22,24] 
+        }else if (this.snmpStatus.model.includes('CBS250-16') || this.snmpStatus.model.includes('CBS350-16')){
+          portS = [1,3,5,7,9,11,13,15,2,4,6,8,10,12,14,16] 
+        }else{}
         return portS
       },
-      is52Port:function(){
-        let is52Port = false
-        if(this.snmpStatus.model =='SG350-52P'){
-          
-          is52Port = true
-  
-        }else{
-          is52Port = false
-        }
-        return is52Port
+
+      isSG350:function(){
+        let isSG350 = false
+        if(this.snmpStatus.model.includes('SG350-52')){
+          isSG350  = true
+          this.SG350_52p = true
+        }else if(this.snmpStatus.model.includes('SG350-28')){
+          isSG350  = true
+          this.SG350_52p = false
+        }else if(this.snmpStatus.model.includes('CBS250-48') || this.snmpStatus.model.includes('CBS350-48')){
+          isSG350  = false
+          this.cbs250_350_48p = true
+        }else if(this.snmpStatus.model.includes('CBS250-24') || this.snmpStatus.model.includes('CBS350-24')){
+          isSG350  = false
+          this.cbs250_350_24p = true
+        }else if(this.snmpStatus.model.includes('CBS250-16') || this.snmpStatus.model.includes('CBS350-16')){
+          isSG350  = false
+          this.cbs250_350_16p = true
+        } else{}
+        return isSG350
       },
       txCount: function(){
         // Count of TX 
         let txCount = ''
 
-        //  SG350-52 with ports 1-48 configured as Vlan2 only
+        //  Switch configured as Vlan2 only- used as RX only switch.
         if([...new Set(this.snmpStatus.PortVlanMembership)].length == 2){
             txCount = 0 // TX = 0
         }else{
@@ -99,30 +154,37 @@ export default {
       rxCount: function(){
         // Count of rx
         let rxCount = ''
-        rxCount = this.portS.length - this.txCount
+        //rxCount = this.portS.length - this.txCount
+        if(this.snmpStatus.model.includes('SG350-28')|| this.snmpStatus.model.includes('SG350-52')){
+              rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-4)
+        }else if(this.snmpStatus.model.includes('CBS250-16')|| this.snmpStatus.model.includes('CBS350-16')){
+              rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-2)
+        }else if(this.snmpStatus.model.includes('CBS250-24')|| this.snmpStatus.model.includes('CBS350-24')){
+              rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-4)
+        }else if(this.snmpStatus.model.includes('CBS250-48')|| this.snmpStatus.model.includes('CBS350-48')){
+              rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-4)
+        }else{}
+    
         return rxCount
-
       },
       portsColor: function() {
             let portsColor = []
-
             // Cisco Switch configured for TX and RX
             if(this.txCount != 0){
               
                 this.snmpStatus.PortVlanMembership.forEach((item,index)=>{
-                  
-                  //Port 1
-                  if(index == 0){
-                      portsColor.push('#2196f3')  //TX color is bluish color
-
-                  // Port 2-xxx
+              
+               if(index <= this.txCount-1){
+                    if(item == 1){
+                        portsColor.push('white')
+                    }else {
+                        portsColor.push('#2196f3')  //TX color is blueish
+                    }
                   }else{
                     if(item == 1){
                         portsColor.push('white')
-                    }else if (item ==2){
+                    }else{
                         portsColor.push('orange')  //RX color orange color
-                    }else {
-                      portsColor.push('#2196f3')    //TX color is blueish
                     }
                   }
                 })
@@ -157,9 +219,10 @@ export default {
   },
   methods:{
       save(){
-           const serverURL = location.hostname
+            const serverURL = location.hostname
             // Save switch config to server
-            let sg350Config = {"ip":"","TXports":"" ,"RXports":""}  //
+            let sg350Config = {"model":"","ip":"","TXports":"" ,"RXports":""}  //
+            sg350Config['model'] = this.snmpStatus.model
             sg350Config['ip'] = this.snmpStatus.SwitchIPAddress
             sg350Config['TXports'] = this.txCount
             sg350Config['RXports'] = this.rxCount
@@ -185,8 +248,15 @@ export default {
 
   },
   mounted(){
+    const serverURL = location.hostname
     //Top of page
     window.scrollTo(0, 0);
+
+    // //clearVariablesNodeRed
+     fetch(`http://${serverURL}:1880/clearVariablesNodeRed`)
+    .then(()=> {
+    })
+    .catch(error => console.log(error));
        
     //Run progress bar and update every 600ms. Hide Save button until after 1 minute
     let counter = 0
@@ -223,7 +293,6 @@ export default {
     height:90vh;
     /* border:1px solid orange; */
 }
-
 .grid-container {
   color:white;
   display: grid;
@@ -236,7 +305,7 @@ export default {
   border:1px solid  white;
   border-radius:6px;
 }
-.sg350{
+.sg350,.cbs250_350{
   display:flex;
   flex-direction:row;
   width:90%;
@@ -244,7 +313,16 @@ export default {
   align-items: center;
   background-color: rgb(28,28,30);
   border:3px solid rgb(28,28,30) ;
-  
+}
+.cbs250_350{
+  color:white;
+  display:flex;
+  flex-direction:row;
+  width:90%;
+  justify-content: center;
+  align-items: center;
+  background-color: whitesmoke;
+  border:3px solid whitesmoke ;
 }
 .port1-48{
   color:white;
@@ -266,6 +344,37 @@ export default {
   height:15vh;
   /* border:1px solid  lightgrey */
 }
+
+.cbs_port1-48{
+  color:white;
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  align-items: center;
+  grid-gap: 2px;
+  width:87.5%;
+  height:15vh;
+  /* border:1px solid  lightgrey */
+}
+.cbs_port1-24{
+  color:white;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+  grid-gap: 2px;
+  width:87.5%;
+  height:15vh;
+  /* border:1px solid  lightgrey */
+}
+.cbs_port1-16{
+  color:white;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  align-items: center;
+  grid-gap: 2px;
+  width:87.5%;
+  height:15vh;
+  /* border:1px solid  lightgrey */
+}
 .port-combo-sfp{
   color:white;
   margin:2px;
@@ -276,12 +385,43 @@ export default {
   height:15vh;
   /* border:1px solid yellow */
 }
+.cbs_250_350-16p-sfp{
+  color:white;
+  margin:2px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  width:12.5%;
+  height:15vh;
+ }
+ .cbs_250_350-24p-sfp{
+  color:white;
+  margin:2px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  width:12.5%;
+  height:15vh;
+ }
+ .cbs_250_350-48p-sfp{
+  color:white;
+  margin:2px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  width:12.5%;
+  height:15vh;
+ }
 .grid-item{
   display:flex;
   flex-direction: column;
   align-items: center;
   border:1px solid #2c3e50
 }
+.cbs-black{
+   background-color: rgb(28,28,30);
+}
+
 #vital-stat div{
   border:1px none red;
 }
@@ -302,7 +442,9 @@ export default {
 }
 .progressFeedback{
   color:white;
-
+}
+.hideMyAss{
+  opacity:0;
 }
 
 </style>

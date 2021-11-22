@@ -13,7 +13,7 @@
              <span v-if= "snmpStatus.SwitchPingTest === 'fail'" class="new badge red" data-badge-caption="switch not detected!"></span>
              <span v-if= "pingControllerStatus === 'fail'" class="new badge red" data-badge-caption="HDLAN Controller not detected!"></span>
              <span v-if= "snmpStatus.PoE === 0 " class="new badge red" data-badge-caption="No PoE Power"></span>
-            <span class="right">HDLAN 063021&nbsp;&nbsp;</span>
+            <span class="right">HDLAN 112221&nbsp;&nbsp;</span>
         </div>
     </nav>
 
@@ -47,7 +47,7 @@
         <div class="modal-content-settings center-align">
             <ul class = "center-align">
                 <router-link to="/ipaddress"><li @click= "closeModal2('synch')"><i class="material-icons blue-icon">router</i><span>Sync Switch</span></li></router-link>
-                <router-link to="/name-zones"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Zones/Groups(optional)</span> </li></router-link>
+                <router-link to="/name-zones"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Zones/Groups</span> </li></router-link>
                 <router-link to="/name-inputs"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Video Inputs</span></li></router-link>
                 <router-link to="/name-outputs"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Video Outputs</span></li></router-link>
                 <router-link to="/timer"><li @click= "closeModal2"><i class="material-icons blue-icon">alarm_add</i>Timer PoE On/Off <span></span></li></router-link>
