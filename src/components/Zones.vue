@@ -7,7 +7,9 @@
               <div class = 'feedbackRX'>{{sourceNames[snmpStatus.PortVlanMembership[item.rxId-1+snmpStatus.txCount] -2]}}</div>
             </div>
         </div>
-
+        <div id = "allRX">
+              <div data-target="slide-out" @click= "emitMsg({name:'',rxId: `zone${zone}`, zone:tvsInZone[0].zone, zoneId:''})" class=" btn-large all sidenav-trigger"><i class="material-icons left">all_inclusive</i>Switch all {{tvsInZone[0].zone}} TVs</div>
+        </div>
         <!-- Floating Action Button -->
           <div class="fixed-action-btn">
               <a class="btn-floating btn-large blue">
@@ -37,7 +39,9 @@ export default {
   },
   methods:{
     emitMsg(item){
+        console.log(item);
         this.$emit('msg-rxSelected', {rx:item})
+
     },
 
   }
@@ -49,13 +53,11 @@ export default {
 .zones{
   display:flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   width:100%;
   height:100vh;
-   /* border:1px solid orange; */
 }
-
 .grid-container {
   color:white;
   display: grid;
@@ -64,9 +66,11 @@ export default {
   align-items: center ;
   grid-gap: 5px;
   width:90%;
-  height:100vh;
+  height:80vh;
   position: relative; 
-  /* border:1px solid red */
+}
+#allRX{
+  width:30%;
 }
 .grid-item{
   display:flex;
@@ -80,7 +84,9 @@ export default {
   width:100%;
   padding:2px;
   position:relative;
-
+}
+.all{
+  color: black;
 }
 small{
     text-transform: capitalize;

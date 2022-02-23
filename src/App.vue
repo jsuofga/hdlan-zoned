@@ -5,7 +5,7 @@
         v-bind:zoneNumber = "zoneNumber" 
         v-bind:pingControllerStatus=  "pingControllerStatus"
     />
-    <Sidenav @msg-txSelected= "tx" @msg-remoteSelected= "remoteControl" v-bind:rxSelected= "rxSelected" v-bind:sourceNames= "sourceNames" v-bind:itachIPs = "itachIPs"  v-bind:stbQty = "stbQty"  /> 
+    <Sidenav @msg-txSelected= "tx" @msg-remoteSelected= "remoteControl" v-bind:rxSelected= "rxSelected" v-bind:sourceNames= "sourceNames" v-bind:itachIPs = "itachIPs"  v-bind:stbQty = "stbQty" v-bind:tvNamesZones = "tvNamesZones"  v-bind:UserSwitchConfig  = "UserSwitchConfig"   /> 
     <router-view 
         @msg-switchIp= "switchIp"
         @msg-rxSelected= "rx" 

@@ -18,7 +18,7 @@
 
 export default {
   name: 'Sidenav',
-  props:['rxSelected','sourceNames','itachIPs','stbQty'],
+  props:['rxSelected','sourceNames','itachIPs','stbQty',"tvNamesZones", "UserSwitchConfig" ],
   data () {
     return {
           sourceNames: []
@@ -33,25 +33,32 @@ export default {
       },
       emitMsg(index){
          
-       console.log('this',index)
+        console.log('this',index)
         const serverURL = `${location.hostname}:1880`
         const rxID = this.rxSelected.rxId
         const rxName = this.rxSelected.name
         const txName = this.sourceNames[index]
         const vlanID = index + 2
         this.$emit('msg-txSelected',{tx:index+1}) // Video Source selected 1-16
-
-        if(rxID != 'all'){
-          // Switch 1 RX
-           console.log(`http://${serverURL}/switchRX/${rxID}/vlan/${vlanID}`);
-          M.toast({ html: `Switch ${rxName} to ${txName} `, classes: "rounded blue" })
-          fetch(`http://${serverURL}/switchRX/${rxID}/vlan/${vlanID}`)
-
-        }else{
-          // Switch All RX
-           console.log(`http://${serverURL}/switchAll/vlan/${vlanID}`)
+       
+        if(rxID == 'all'){
+          // Switch all RX
+          console.log(`http://${serverURL}/switchAll/vlan/${vlanID}`)
           M.toast({ html: `Switch ALL to ${txName} `, classes: "rounded blue" })
           fetch(`http://${serverURL}/switchAll/vlan/${vlanID}`)
+
+        }else if(rxID.toString().includes('zone')){
+          // Switch all rx in the selected Zone 
+          let zoneSelected = rxID.replace("zone","")  // The Zone selected
+          console.log(`http://${serverURL}/switchZone/${zoneSelected}/vlan/${vlanID}`)
+          fetch(`http://${serverURL}/switchZone/${zoneSelected}/vlan/${vlanID}`)
+          M.toast({ html: `Switch ${this.rxSelected.zone} TVs to ${txName} `, classes: "rounded blue" })
+
+        }else{
+          // Switch Single RX
+          console.log(`http://${serverURL}/switchRX/${rxID}/vlan/${vlanID}`);
+          M.toast({ html: `Switch ${rxName} to ${txName} `, classes: "rounded blue" })
+          fetch(`http://${serverURL}/switchRX/${rxID}/vlan/${vlanID}`)
       
         }
 
