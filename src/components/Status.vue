@@ -84,7 +84,7 @@ export default {
       this.getStatus()
       this.getUserInputNames()
       this.getUserTvZoneNames()
-      setInterval(this.getStatus, 10000)
+      setInterval(this.getStatus, 5000)
   }
 
 }

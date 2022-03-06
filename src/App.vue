@@ -144,15 +144,15 @@ export default {
       //this.zoneNumber = payload.zoneId
       this.zoneNumber = payload.zoneId + 1
     },
-    readFromSever(){
+    async readFromSever(){
         console.log('route changed')
-        this.get_zoneNames()
-        this.get_tvZoneAssignment()
-        this.get_sourceNames()
-        this.get_UserPresets()
-        this.get_UserItachIPs()
-        this.get_UserFavChannels()
-        this.get_UserSwitchConfig()
+        await this.get_zoneNames()
+        await this.get_tvZoneAssignment()
+        await this.get_sourceNames()
+        await this.get_UserPresets()
+        await this.get_UserItachIPs()
+        await this.get_UserFavChannels()
+        await this.get_UserSwitchConfig()
     },
     get_zoneNames(){
          const serverURL = `${location.hostname}:3000`
@@ -193,10 +193,13 @@ export default {
               this.tvNames.push(result[item].name)
               this.tvNamesZones.push(result[item])
             }
-            
-            // Remove duplicates from zones to create unique set
-            // this.zoneNamesToDisplay = [...new Set(this.zones)]
-            this.zoneNamesToDisplay = [...new Set(this.zones)]
+            this.zoneNamesToDisplay = this.zoneNames
+            //check if if a RX is assigned to zone in zoneNames and save in zoneNamesToDisplay. 
+            // this.zoneNames.forEach(item =>{
+            //   if(this.zones.includes(item)){
+            //     this.zoneNamesToDisplay.push(item)
+            //   }
+            // })
             console.log( this.zones)
             console.log( this.zonesId)
             console.log( this.zoneNamesToDisplay)
@@ -314,9 +317,12 @@ export default {
   },
 
   //Lifecycle Hooks
+  created(){
+    this.readFromSever()
+  },
   mounted () {
     M.AutoInit() //Materialize Init
-    this.readFromSever()
+    //this.readFromSever()
   },
 }
 

@@ -8,7 +8,7 @@
             </div>
         </div>
         <div id = "allRX">
-              <div data-target="slide-out" @click= "emitMsg({name:'',rxId: `zone${zone}`, zone:tvsInZone[0].zone, zoneId:''})" class=" btn-large all sidenav-trigger"><i class="material-icons left">all_inclusive</i>Switch all {{tvsInZone[0].zone}} TVs</div>
+              <div data-target="slide-out" @click= "emitMsg({name:'',rxId: `zone${zone}`, zone:tvsInZone[0].zone, zoneId:''})" class=" btn-large all sidenav-trigger"><i class="material-icons large">all_inclusive</i><strong> all {{tvsInZone[0].zone}} TVs</strong></div>
         </div>
         <!-- Floating Action Button -->
           <div class="fixed-action-btn">
@@ -44,6 +44,7 @@ export default {
 
     },
 
+
   }
 }
 </script>
@@ -72,6 +73,7 @@ export default {
 #allRX{
   width:30%;
 }
+
 .grid-item{
   display:flex;
   flex-direction: column;
@@ -87,6 +89,7 @@ export default {
 }
 .all{
   color: black;
+  border-radius: 10px;
 }
 small{
     text-transform: capitalize;

@@ -1,11 +1,13 @@
 <template>
  <div class="home">
-      <div v-if= "oneZoneOnly === 0" class = "welcome">
+      <!-- <div v-if= "oneZoneOnly === 0" class = "welcome"> -->
+      <div v-if= "zoneNamesToDisplay.length === 0" class = "welcome">
         <h3>Welcome</h3>
         <h3>Goto settings to add displays to system</h3>
           
       </div>
-      <div v-else-if= "oneZoneOnly === 1" class = "single-zone" >
+      <!-- <div v-else-if= "oneZoneOnly === 1" class = "single-zone" > -->
+      <div v-else-if= "zoneNamesToDisplay.length === 1" class = "single-zone" >
             <div @click= "showZone(item,index)" class = "waves-effect waves-light roundBtn btn-large" v-for="(item,index) in zoneNamesToDisplay" :key="index">{{zoneNamesToDisplay[index]}}</div>
             <div @click= "switchAll" data-target="slide-out" class="waves-effect waves-light roundBtn btn-large sidenav-trigger">ALL TVs</div>
       </div>
@@ -42,17 +44,17 @@ export default {
     }
   },
   computed:{
-      oneZoneOnly: function(){
-        console.log("length:",this.zoneNamesToDisplay.length)
-         if(this.zoneNamesToDisplay.length == 0){
-           return (0)
-         }else if (this.zoneNamesToDisplay.length == 1){
-           return (1)
-         }
-         else{
-           return (false)
-         }
-      }
+      // oneZoneOnly: function(){
+      //   console.log("length:",this.zoneNamesToDisplay.length)
+      //    if(this.zoneNamesToDisplay.length == 0){
+      //      return (0)
+      //    }else if (this.zoneNamesToDisplay.length == 1){
+      //      return (1)
+      //    }
+      //    else{
+      //      return (false)
+      //    }
+      // }
   },
   methods:{
          showZone(item,index){

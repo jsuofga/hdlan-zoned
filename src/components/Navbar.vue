@@ -13,7 +13,7 @@
              <span v-if= "snmpStatus.SwitchPingTest === 'fail'" class="new badge red" data-badge-caption="switch not detected!"></span>
              <span v-if= "pingControllerStatus === 'fail'" class="new badge red" data-badge-caption="HDLAN Controller not detected!"></span>
              <span v-if= "snmpStatus.PoE === 0 " class="new badge red" data-badge-caption="No PoE Power"></span>
-            <span class="right">HDLAN 22322A&nbsp;&nbsp;</span>
+            <span class="right">HDLAN 30422&nbsp;&nbsp;</span>
         </div>
     </nav>
 
