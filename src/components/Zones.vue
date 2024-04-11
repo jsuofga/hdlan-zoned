@@ -73,7 +73,6 @@ export default {
 #allRX{
   width:30%;
 }
-
 .grid-item{
   display:flex;
   flex-direction: column;

@@ -1,0 +1,1 @@
+{"model":"CBS250-24P-4G","ip":"192.168.1.182","TXports":8,"RXports":15}

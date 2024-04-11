@@ -1,6 +1,6 @@
 <template>
  <div class="update">
-        <h5>HDLAN Controller Update</h5>
+        <h5 v-if = "!rebooting" >HDLAN Controller Update</h5>
             <div v-if= "showFileButton"  id="input">
             <input v-on:change= "fileSelect" id="file-select-button" type="file" >
         </div>
@@ -10,10 +10,14 @@
         </div>
 
         <div v-if= "showProgressBar" id = 'progress-container'>
-          <div class="progress">
+          <div v-if = "!rebooting" class="progress">
             <div class="determinate blue" v-bind:style= "{width: completion}"></div>
           </div>
-          <div class ='progressFeedback'>Uploading {{completion}}</div>
+          <div v-if = "!rebooting" class ='progressFeedback'>Uploading {{completion}}</div>
+          <div v-if = "rebooting"  class="progress">
+              <div class="determinate green" v-bind:style= "{width:rebootPercent}"></div>
+          </div>
+          <div v-if = "rebooting"> Please Wait. Restarting Controller </div>
         </div>
 
         <!-- Floating Action Button -->
@@ -41,14 +45,32 @@ export default {
       completion: '0%',
       showFileButton:true,
       showUploadButton: false,
-      showProgressBar : false
+      showProgressBar : false,
+      rebooting: false,
+      interval: {},
+      rebootCompletion: 0,
+      rebootPercent:"0%"
+
     }
   },
   computed:{
 
   },
   methods:{
+    startTimer(){
+      // wait for 60 seconds while server reboots, then reload and goto page /
+        this.interval = setInterval(() => {
+        this.rebootCompletion = this.rebootCompletion === 100 ? 0 : this.rebootCompletion + 1;
+        this.rebootPercent = `${this.rebootCompletion.toString()}%`
+        if(this.rebootCompletion == 100){
+            this.rebooting = false
+            this.$router.push('/')
+            setTimeout(function() {location.reload()}, 3000);
+        }
+      }, 600);
+    },
     fileSelect(event){
+       this.showFileButton = false
        this.showUploadButton = true
       this.selectedFile = event.target.files[0]  // get selected file 
     },
@@ -78,9 +100,13 @@ export default {
             // JSON responses are automatically parsed.
             if (res.status === 200) {
               //alert('update request received')
-              M.toast({ html: `UPDATED`, classes: "rounded blue" })
-              this.$router.push({name:'home'})
-              location.reload()
+              // M.toast({ html: `UPDATED`, classes: "rounded blue" })
+              // this.$router.push({name:'home'})
+              // location.reload()
+
+              this.rebooting = true
+              this.startTimer()
+           
             } else {
               // Handle the user data here...
               alert('fail')
@@ -104,6 +130,9 @@ export default {
   mounted(){
         M.AutoInit() // For Materialize to work!
         window.scrollTo(0, 0) //Top of page
+  },
+  beforeUnmount(){
+    clearInterval(this.interval);
   }
 
 }

@@ -1,0 +1,1 @@
+[{"rxId":1,"name":"Main 1","zoneId":1,"zone":"Main"},{"rxId":2,"name":"Main 2","zoneId":1,"zone":"Main"},{"rxId":3,"name":"Bar 1","zoneId":2,"zone":"Bar"},{"rxId":4,"name":"Bar 2","zoneId":2,"zone":"Bar"}]

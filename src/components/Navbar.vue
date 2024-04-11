@@ -5,7 +5,8 @@
         <div class="nav-wrapper">
             <div v-if = 'showZoneTitle' class="brand-logo center">{{zoneNames[zoneNumber-1]}}</div>
             <div v-else class="brand-logo center">
-                <img src="@/assets/images/octava_logo_white-200.png">  
+                <!-- <img src="@/assets/images/octava_logo_white-200.png">   -->
+                <img src="@/assets/images/octava_logo_white-200.png" >  
             </div>
             <ul >
                 <li><a @click= "openModal1"><i class="material-icons">menu</i></a></li>
@@ -13,7 +14,7 @@
              <span v-if= "snmpStatus.SwitchPingTest === 'fail'" class="new badge red" data-badge-caption="switch not detected!"></span>
              <span v-if= "pingControllerStatus === 'fail'" class="new badge red" data-badge-caption="HDLAN Controller not detected!"></span>
              <span v-if= "snmpStatus.PoE === 0 " class="new badge red" data-badge-caption="No PoE Power"></span>
-            <span class="right">HDLAN 30422&nbsp;&nbsp;</span>
+            <span class="right">AVLAN 041124&nbsp;&nbsp;</span>
         </div>
     </nav>
 
@@ -171,7 +172,8 @@ export default {
 
 <style scoped>
     .nav-extended{
-        background-color: rgb(28,28,30);
+        /* background-color: rgb(28,28,30); */
+        background-color: rgb(66, 66, 66);
     }
     #power{
         display:flex;

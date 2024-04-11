@@ -149,7 +149,7 @@ export default {
    flex-direction: row;
    justify-content: center;
    align-items: center;
-   border:5px solid white;
+   /* border:5px solid white; */
    font-size: 1.5rem;
    height:150px;
    width:150px;
