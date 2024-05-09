@@ -44,8 +44,17 @@
         <div v-else-if = "cbs250_350_16p"   class = 'cbs_port1-16'>
             <div class = 'grid-item cbs-black'  v-for="(item, index) in portS" :key="index" ><i class="material-icons small " v-bind:style= "{color: portsColor[item-1],opacity: portsActive[item-1]}" >inbox</i>{{item}}</div>
         </div > 
+        <div v-else-if = "cbs250_350_8p"   class = 'cbs_port1-8'>
+            <div class = 'grid-item cbs-black'  v-for="(item, index) in portS" :key="index" ><i class="material-icons small " v-bind:style= "{color: portsColor[item-1],opacity: portsActive[item-1]}" >inbox</i>{{item}}</div>
+        </div > 
         <!-- SFP Ports -->
-        <div v-if = "cbs250_350_16p"  class = 'cbs_250_350-16p-sfp'>
+        <div v-if = "cbs250_350_8p"  class = 'cbs_250_350-8p-sfp'>
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+1],opacity: portsActive[portS.length+1]}" >inbox</i>{{portS.length+1}}</div>       
+            <div class = 'grid-item cbs-black '><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+2],opacity: portsActive[portS.length+2]}" >inbox</i>{{portS.length+2}}</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+1],opacity: portsActive[portS.length+1]}" >crop_free</i>{{portS.length+1}} </div>       
+            <div class = 'grid-item cbs-black '><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+2],opacity: portsActive[portS.length+2]}" >crop_free</i>{{portS.length+2}}</div>       
+        </div>
+        <div v-else-if = "cbs250_350_16p"  class = 'cbs_250_350-16p-sfp'>
             <div class = 'grid-item hideMyAss'><i class="material-icons small " >crop_free</i>{{portS.length+1}}</div>       
             <div class = 'grid-item hideMyAss'><i class="material-icons small " >crop_free</i>{{portS.length+2}}</div>       
             <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length],opacity: portsActive[portS.length]}" >crop_free</i>{{portS.length+1}}</div>       
@@ -62,10 +71,10 @@
             <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+3],opacity: portsActive[portS.length+3]}" >crop_free</i>{{portS.length+4}}</div>       
         </div>
         <div v-else  class = 'cbs_250_350-48p-sfp'>
-            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length],opacity: portsActive[portS.length]}">crop_free</i>SFP-49</div>       
-            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+2],opacity: portsActive[portS.length+2]}" >crop_free</i>SFP-51</div>       
-            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+1],opacity: portsActive[portS.length+1]}" >crop_free</i>SFP-50</div>       
-            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+3],opacity: portsActive[portS.length+3]}" >crop_free</i>SFP-52</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length],opacity: portsActive[portS.length]}">crop_free</i>SF-49</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+2],opacity: portsActive[portS.length+2]}" >crop_free</i>SF-51</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+1],opacity: portsActive[portS.length+1]}" >crop_free</i>SF-50</div>       
+            <div class = 'grid-item cbs-black'><i class="material-icons small " v-bind:style= "{color: portsColor[portS.length+3],opacity: portsActive[portS.length+3]}" >crop_free</i>SF-52</div>       
         </div>
 
      </div>
@@ -96,6 +105,7 @@ export default {
         showSaveButton: true,
         onOff: true,
         SG350_52p: false,
+        cbs250_350_8p: false,
         cbs250_350_16p: false,
         cbs250_350_24p: false,
         cbs250_350_48p: false,
@@ -114,6 +124,8 @@ export default {
           portS = [1,3,5,7,9,11,13,15,17,19,21,23,2,4,6,8,10,12,14,16,18,20,22,24] 
         }else if (this.snmpStatus.model.includes('CBS250-16') || this.snmpStatus.model.includes('CBS350-16')){
           portS = [1,3,5,7,9,11,13,15,2,4,6,8,10,12,14,16] 
+        }else if (this.snmpStatus.model.includes('CBS250-8') || this.snmpStatus.model.includes('CBS350-8')){
+          portS = [1,2,3,4,5,6,7,8] 
         }else{}
         return portS
       },
@@ -135,6 +147,9 @@ export default {
         }else if(this.snmpStatus.model.includes('CBS250-16') || this.snmpStatus.model.includes('CBS350-16')){
           isSG350  = false
           this.cbs250_350_16p = true
+        } else if(this.snmpStatus.model.includes('CBS250-8') || this.snmpStatus.model.includes('CBS350-8')){
+          isSG350  = false
+          this.cbs250_350_8p = true
         } else{}
         return isSG350
       },
@@ -157,6 +172,9 @@ export default {
         //rxCount = this.portS.length - this.txCount
         if(this.snmpStatus.model.includes('SG350-28')|| this.snmpStatus.model.includes('SG350-52')){
               rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-4)
+              
+        }else if(this.snmpStatus.model.includes('CBS250-8')|| this.snmpStatus.model.includes('CBS350-8')){
+              rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-2)
         }else if(this.snmpStatus.model.includes('CBS250-16')|| this.snmpStatus.model.includes('CBS350-16')){
               rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-2)
         }else if(this.snmpStatus.model.includes('CBS250-24')|| this.snmpStatus.model.includes('CBS350-24')){
@@ -375,6 +393,16 @@ export default {
   height:15vh;
   /* border:1px solid  lightgrey */
 }
+.cbs_port1-8{
+  color:white;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  align-items: center;
+  grid-gap: 2px;
+  width:87.5%;
+  height:15vh;
+  /* border:1px solid  lightgrey */
+}
 .port-combo-sfp{
   color:white;
   margin:2px;
@@ -390,6 +418,15 @@ export default {
   margin:2px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  width:12.5%;
+  height:15vh;
+ }
+ .cbs_250_350-8p-sfp{
+  color:white;
+  margin:2px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
   width:12.5%;
   height:15vh;
