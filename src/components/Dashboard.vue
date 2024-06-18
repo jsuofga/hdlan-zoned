@@ -118,13 +118,13 @@ export default {
           portS = [...Array(48).keys()] 
         }else if (this.snmpStatus.model.includes('SG350-28')){
           portS = [...Array(24).keys()] 
-        }else if (this.snmpStatus.model.includes('CBS250-48') || this.snmpStatus.model.includes('CBS350-48')){
+        }else if (this.snmpStatus.model.includes('CBS250-48') || this.snmpStatus.model.includes('CBS350-48') || this.snmpStatus.model.includes('C1200-48')){
           portS = [1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48] 
-        }else if (this.snmpStatus.model.includes('CBS250-24') || this.snmpStatus.model.includes('CBS350-24')){
+        }else if (this.snmpStatus.model.includes('CBS250-24') || this.snmpStatus.model.includes('CBS350-24') || this.snmpStatus.model.includes('C1200-24')){
           portS = [1,3,5,7,9,11,13,15,17,19,21,23,2,4,6,8,10,12,14,16,18,20,22,24] 
-        }else if (this.snmpStatus.model.includes('CBS250-16') || this.snmpStatus.model.includes('CBS350-16')){
+        }else if (this.snmpStatus.model.includes('CBS250-16') || this.snmpStatus.model.includes('CBS350-16') || this.snmpStatus.model.includes('C1200-16')){
           portS = [1,3,5,7,9,11,13,15,2,4,6,8,10,12,14,16] 
-        }else if (this.snmpStatus.model.includes('CBS250-8') || this.snmpStatus.model.includes('CBS350-8')){
+        }else if (this.snmpStatus.model.includes('CBS250-8') || this.snmpStatus.model.includes('CBS350-8') || this.snmpStatus.model.includes('C1200-8')){
           portS = [1,2,3,4,5,6,7,8] 
         }else{}
         return portS
@@ -138,16 +138,16 @@ export default {
         }else if(this.snmpStatus.model.includes('SG350-28')){
           isSG350  = true
           this.SG350_52p = false
-        }else if(this.snmpStatus.model.includes('CBS250-48') || this.snmpStatus.model.includes('CBS350-48')){
+        }else if(this.snmpStatus.model.includes('CBS250-48') || this.snmpStatus.model.includes('CBS350-48') || this.snmpStatus.model.includes('C1200-48')){
           isSG350  = false
           this.cbs250_350_48p = true
-        }else if(this.snmpStatus.model.includes('CBS250-24') || this.snmpStatus.model.includes('CBS350-24')){
+        }else if(this.snmpStatus.model.includes('CBS250-24') || this.snmpStatus.model.includes('CBS350-24') || this.snmpStatus.model.includes('C1200-24')){
           isSG350  = false
           this.cbs250_350_24p = true
-        }else if(this.snmpStatus.model.includes('CBS250-16') || this.snmpStatus.model.includes('CBS350-16')){
+        }else if(this.snmpStatus.model.includes('CBS250-16') || this.snmpStatus.model.includes('CBS350-16') || this.snmpStatus.model.includes('C1200-16')){
           isSG350  = false
           this.cbs250_350_16p = true
-        } else if(this.snmpStatus.model.includes('CBS250-8') || this.snmpStatus.model.includes('CBS350-8')){
+        } else if(this.snmpStatus.model.includes('CBS250-8') || this.snmpStatus.model.includes('CBS350-8') || this.snmpStatus.model.includes('C1200-8')){
           isSG350  = false
           this.cbs250_350_8p = true
         } else{}
@@ -173,13 +173,13 @@ export default {
         if(this.snmpStatus.model.includes('SG350-28')|| this.snmpStatus.model.includes('SG350-52')){
               rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-4)
               
-        }else if(this.snmpStatus.model.includes('CBS250-8')|| this.snmpStatus.model.includes('CBS350-8')){
+        }else if(this.snmpStatus.model.includes('CBS250-8')|| this.snmpStatus.model.includes('CBS350-8') || this.snmpStatus.model.includes('C1200-8')){
               rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-2)
-        }else if(this.snmpStatus.model.includes('CBS250-16')|| this.snmpStatus.model.includes('CBS350-16')){
+        }else if(this.snmpStatus.model.includes('CBS250-16')|| this.snmpStatus.model.includes('CBS350-16') || this.snmpStatus.model.includes('C1200-16')){
               rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-2)
-        }else if(this.snmpStatus.model.includes('CBS250-24')|| this.snmpStatus.model.includes('CBS350-24')){
+        }else if(this.snmpStatus.model.includes('CBS250-24')|| this.snmpStatus.model.includes('CBS350-24') || this.snmpStatus.model.includes('C1200-24')){
               rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-4)
-        }else if(this.snmpStatus.model.includes('CBS250-48')|| this.snmpStatus.model.includes('CBS350-48')){
+        }else if(this.snmpStatus.model.includes('CBS250-48')|| this.snmpStatus.model.includes('CBS350-48') || this.snmpStatus.model.includes('C1200-48')){
               rxCount = this.portS.length - this.txCount - (this.snmpStatus.vlan1Count-4)
         }else{}
     
