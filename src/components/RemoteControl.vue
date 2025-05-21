@@ -2,7 +2,7 @@
 
   <div class="remote-control">
         <h6 class="center-align white-text">Remote for {{remoteName}}</h6>
-        <div class = 'grid-container1'>
+        <div v-if ="remote !=5" class = 'grid-container1'>
             <div class = 'grid-item1'><i id = "power-on" @click= "otherBtnPressed('on')" class="material-icons">power_settings_new</i></div>
             <div class = 'grid-item1'></div>
             <div class = 'grid-item1'><i  @click = "otherBtnPressed('cursor_up')" class="material-icons btn-icons">expand_less</i></div>
@@ -19,7 +19,7 @@
             <div class = 'grid-item1'></div>
             <div class = 'grid-item1'></div>
         </div>
-        <div class = 'grid-container2'>
+        <div  v-if ="remote !=5" class = 'grid-container2'>
             <div class = 'grid-item2'><a  @click = "otherBtnPressed('guide')" class="waves-effect waves-light btn">Guide</a></div>
             <div class = 'grid-item2'><div @click = "numberBtnPressed(1)" class = 'roundBtn'>1</div></div>
             <div class = 'grid-item2'><div @click = "numberBtnPressed(2)" class = 'roundBtn'>2</div></div>
@@ -41,6 +41,31 @@
             <div class = 'grid-item2'></div>
             <div class = 'grid-item2'><a  @click = "otherBtnPressed('enter')" class="waves-effect waves-light btn">Enter</a></div>
         </div>
+
+        <!-- ROKU  -->
+        <div v-else class = 'grid-container1'>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'><i @click = "otherBtnPressed('menu_home')" class="material-icons btn-icons-small">home</i></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'><i id = "power-on" @click= "BtnPressed('on')" class="material-icons">power_settings_new</i></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'><i @click = "otherBtnPressed('cursor_up')" class="material-icons btn-icons">expand_less</i></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'><i id = "power-off"  @click = "otherBtnPressed('off')" class="material-icons ">power_settings_new</i></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'><i id ='cursor-left'  @click = "otherBtnPressed('cursor_left')" class="material-icons btn-icons">expand_less</i></div>
+          <div class = 'grid-item1'><div  @click = "otherBtnPressed('cursor_enter')" class = 'roundBtn'>Select</div></div>
+          <div class = 'grid-item1'><i id ='cursor-right'  @click = "otherBtnPressed('cursor_right')" class="material-icons btn-icons ">expand_less</i></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'><i @click = "otherBtnPressed('cursor_down')" class="material-icons btn-icons">expand_more</i></div>
+          <div class = 'grid-item1'></div>
+          <div class = 'grid-item1'></div>
+        </div>
+
         <div class = 'grid-container3'>
             <div v-for="(item, index) in favChNames" :key="index" class = 'grid-item3'> <a @click = "favoriteBtnPressed(index)" class="waves-effect waves-light btn-favs">{{favChNames[index]}}<span>{{favChStations[index]}}</span></a></div>
         </div>
@@ -152,6 +177,9 @@ export default {
 }
 .btn-icons{
     transform: scale(3)  
+}
+.btn-icons-small{
+    transform: scale(2)  
 }
 #power-on{
     color:green;

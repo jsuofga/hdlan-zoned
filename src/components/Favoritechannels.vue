@@ -47,7 +47,7 @@ export default {
     },
     data(){
         return{
-            channels: [...Array(999).keys()],
+            channels: [...Array(999).keys(),9551,9552],
             selected: '',
             favChNames:[],
             favChStations:[]

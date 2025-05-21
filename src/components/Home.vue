@@ -9,11 +9,11 @@
       <!-- <div v-else-if= "oneZoneOnly === 1" class = "single-zone" > -->
       <div v-else-if= "zoneNamesToDisplay.length === 1" class = "single-zone" >
             <div @click= "showZone(item,index)" class = "waves-effect waves-light roundBtn btn-large" v-for="(item,index) in zoneNamesToDisplay" :key="index">{{zoneNamesToDisplay[index]}}</div>
-            <div @click= "switchAll" data-target="slide-out" class="waves-effect waves-light roundBtn btn-large sidenav-trigger">ALL TVs</div>
+            <!-- <div @click= "switchAll" data-target="slide-out" class="waves-effect waves-light roundBtn btn-large sidenav-trigger">ALL TVs</div> -->
       </div>
       <div v-else class = "zone" >
           <div @click= "showZone(item,index)" class = "waves-effect waves-light roundBtn btn-large" v-for="(item,index) in zoneNamesToDisplay" :key="index">{{zoneNamesToDisplay[index]}}</div>
-          <div @click= "switchAll" data-target="slide-out" class="waves-effect waves-light roundBtn btn-large sidenav-trigger"><i class="material-icons">all_inclusive</i>ALL</div>
+          <!-- <div @click= "switchAll" data-target="slide-out" class="waves-effect waves-light roundBtn btn-large sidenav-trigger"><i class="material-icons">all_inclusive</i>ALL</div> -->
      </div>
  
      <!-- Floating Action Button -->

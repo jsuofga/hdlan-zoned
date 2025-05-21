@@ -14,7 +14,7 @@
             <div class="field">
                 <!-- <label for="Video Input"></label> -->
                 <div class = 'inputDiv' > 
-                      <input id = 'input' name="input" v-model= "itachIP" placeholder="IP Address of Itach (ex. 192.168.1.xx)" type="text" required maxlength="14">
+                      <input id = 'input' name="input" v-model= "itachIP" placeholder="IP Address of Itach (ex. 192.168.1.xx)" type="text" required maxlength="15">
                       <span class = "add"><i class="material-icons" v-on:click= "add">add</i></span>
                 </div>
             </div>
@@ -22,7 +22,7 @@
           <div class = 'listDiv'>
                    <div class = "gridItem" v-for="(item,index) in itachIPs" :key="index">
                       <label v-bind:for= "itachIPs[index]">Global Cache Itach {{index+1}}.</label>
-                      <input class = 'inputFont' type="text" name = "itachIPs[index]" v-model= "itachIPs[index]" maxlength="14">
+                      <input class = 'inputFont' type="text" name = "itachIPs[index]" v-model= "itachIPs[index]" maxlength="15">
                       <span class = "trash"><i class="material-icons" v-on:click= "trash(index)">delete_forever</i></span>
                   </div>
           </div>

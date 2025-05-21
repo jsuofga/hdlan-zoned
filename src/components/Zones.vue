@@ -8,7 +8,7 @@
             </div>
         </div>
         <div id = "allRX">
-              <div data-target="slide-out" @click= "emitMsg({name:'',rxId: `zone${zone}`, zone:tvsInZone[0].zone, zoneId:''})" class=" btn-large all sidenav-trigger"><i class="material-icons large">all_inclusive</i><strong> all {{tvsInZone[0].zone}} TVs</strong></div>
+              <!-- <div data-target="slide-out" @click= "emitMsg({name:'',rxId: `zone${zone}`, zone:tvsInZone[0].zone, zoneId:''})" class=" btn-large all sidenav-trigger"><i class="material-icons large">all_inclusive</i><strong> all {{tvsInZone[0].zone}} TVs</strong></div> -->
         </div>
         <!-- Floating Action Button -->
           <div class="fixed-action-btn">

@@ -3,7 +3,7 @@
   <div class="ipaddress container">
      
       <form >
-            <h5>Cisco SG350 IP Address</h5>
+            <h5>Cisco Switch IP Address</h5>
             <h6>{{snmpStatus.model}}</h6>
             <!-- <h6 class = 'red-text'>Re-power Cisco SG350 before proceeding </h6> -->
             <div class="field">
