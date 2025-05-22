@@ -3,7 +3,7 @@
   <div class="ipaddress container">
      
       <form >
-            <h5>Cisco SG350 IP Address</h5>
+            <h5>Cisco Switch IP Address</h5>
             <h6>{{snmpStatus.model}}</h6>
             <!-- <h6 class = 'red-text'>Re-power Cisco SG350 before proceeding </h6> -->
             <div class="field">
@@ -41,8 +41,24 @@ export default {
         this.$router.push({name:'home'})
     },
 
+    isValidIP(ip) {
+      // Regex for IPv4 validation
+      const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
+      return ipv4Regex.test(ip);
+    },
+
     connect(e){
       e.preventDefault()
+
+      if (!this.ipAddress) {
+        this.feedbackMessage = "Enter IP address for Cisco Switch!"
+        return;
+      }
+      if (!this.isValidIP(this.ipAddress)) {
+        this.feedbackMessage = "Invalid IP address format. Please use format like 192.168.1.128.";
+        return;
+      }
+
       const serverURL = location.hostname
       
       //Save IP address of Cisco Switch to server

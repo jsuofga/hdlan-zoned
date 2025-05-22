@@ -22,7 +22,8 @@
           <div class = 'listDiv'>
                    <div class = "gridItem" v-for="(item,index) in itachIPs" :key="index">
                       <label v-bind:for= "itachIPs[index]">Global Cache Itach {{index+1}}.</label>
-                      <input class = 'inputFont' type="text" name = "itachIPs[index]" v-model= "itachIPs[index]" maxlength="15">
+                      <input class = 'inputFont' type="text" name = "itachIPs[index]" v-model= "itachIPs[index]" maxlength="15"  @blur="validateItem(index)">
+                      <p class="feedback center-align" v-if="feedbackMessages[index]">{{ feedbackMessages[index] }}</p>
                       <span class = "trash"><i class="material-icons" v-on:click= "trash(index)">delete_forever</i></span>
                   </div>
           </div>
@@ -55,9 +56,15 @@ export default {
           stbQty:[],
           selected:'',
           count: [...Array(24).keys()],
+          feedbackMessages: []    // <-- per-item feedback
         }
     },
     methods: {
+
+      isValidIP(ip) {
+        const ipv4Regex = /^(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d{2}|[1-9]?\d)){3}$/;
+        return ipv4Regex.test(ip);
+      },
       add(){
           if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(this.itachIP)){
                   this.itachIPs.push(this.itachIP)
@@ -66,13 +73,36 @@ export default {
           }else{
                 alert('Enter Valid IP Address')
           }
-
       },
       trash(index){
         this.itachIPs.splice(index,1)
       },
+      validateItem(index) {
+          const ip = this.itachIPs[index] || '';
+          if (!this.isValidIP(ip)) {
+            this.$set(this.feedbackMessages, index, 'Invalid IP format');
+          } else {
+            this.$set(this.feedbackMessages, index, '');
+          }
+      },
       save(e){
           e.preventDefault()
+          // Check for invalid IPs
+          let hasInvalid = false;
+          this.itachIPs.forEach((ip, index) => {
+            if (!this.isValidIP(ip)) {
+              this.$set(this.feedbackMessages, index, 'Invalid IP format');
+              hasInvalid = true;
+            } else {
+              this.$set(this.feedbackMessages, index, '');
+            }
+          });
+
+          if (hasInvalid) {
+            alert('Please correct invalid IP addresses before saving.');
+            return; // Stop the save process
+          }
+
           M.toast({ html: `Saving updates`, classes: "rounded blue" });
           
           const serverURL = `${location.hostname}:3000`        
