@@ -123,6 +123,12 @@ app.get('/read/:userinput', function(req,res){
             res.send(data) //
         })
     
+     }else if(userinput == 'UserMultiViewerIPs'){
+        fs.readFile('public/UserMultiViewerIPs.txt',"utf8", function (err, data) {
+            if (err) throw err;
+            res.send(data) //
+        })
+    
     }else if(userinput == 'UserFavChannels'){
         fs.readFile('public/UserFavChannels.txt',"utf8", function (err, data) {
             if (err) throw err;
@@ -195,6 +201,11 @@ app.get('/write/:file/:dataIn', function(req,res){
         })
     } else if (userinput == 'UserFavChannels') {
         fs.writeFile('public/UserFavChannels.txt', dataIn, function (err, data) {
+            if (err) throw err;
+            res.send(data) //
+        })
+    } else if (userinput == 'UserMultiViewerIPs') {
+        fs.writeFile('public/UserMultiViewerIPs.txt', dataIn, function (err, data) {
             if (err) throw err;
             res.send(data) //
         })

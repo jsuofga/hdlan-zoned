@@ -3,7 +3,11 @@
   <div class="zones">
         <div class = 'grid-container'>
             <div v-for="(item, index) in tvsInZone" :key="index" class='grid-item'>
-              <div data-target="slide-out" @click= "emitMsg(item)" class="btn-large sidenav-trigger" style= 'color:black'><small>{{item.name}}</small><span>P{{item.rxId + snmpStatus.txCount}}</span></div>
+              <div data-target="slide-out" @click= "emitMsg(item)" class="btn-large sidenav-trigger" style= 'color:black'>
+                <small>{{item.name}}</small>
+                <span>P{{item.rxId + snmpStatus.txCount}}</span> 
+                <div v-if = "snmpStatus.PortOperationalStatus[item.rxId-1+snmpStatus.txCount] !== 1" class = "poe-status">!fault</div>
+              </div>
               <div class = 'feedbackRX'>{{sourceNames[snmpStatus.PortVlanMembership[item.rxId-1+snmpStatus.txCount] -2]}}</div>
             </div>
         </div>
@@ -105,6 +109,14 @@ span{
 .btn-large:hover{
   background-color:#2196f3  !important ;
   color:white !important;
+}
+.poe-status{
+   position:absolute;
+  color:red;
+  padding:0px;
+  top:-20px;
+  left:0px;
+  transform: scale(.5);
 }
 
 </style>

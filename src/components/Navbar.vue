@@ -14,7 +14,7 @@
              <span v-if= "snmpStatus.SwitchPingTest === 'fail'" class="new badge red" data-badge-caption="switch not detected!"></span>
              <span v-if= "pingControllerStatus === 'fail'" class="new badge red" data-badge-caption="HDLAN Controller not detected!"></span>
              <span v-if= "snmpStatus.PoE === 0 " class="new badge red" data-badge-caption="No PoE Power"></span>
-            <span class="right">AVLAN 052225&nbsp;&nbsp;</span>
+            <span class="right">AVLAN 100625&nbsp;&nbsp;</span>
         </div>
     </nav>
 
@@ -58,6 +58,7 @@
                 <li @click= "savePreset(3)" ><router-link to=""><i class="material-icons blue-icon">save</i><span>Save to Preset 3</span> </router-link></li>
                 <router-link to="/itach"><li @click= "closeModal2"><i class="material-icons blue-icon">router</i><span>Global Cache Itach</span> </li></router-link>
                 <router-link to="/favoritechannels"><li @click= "closeModal2"><i class="material-icons blue-icon">settings_remote</i><span>Channels Favorite</span> </li></router-link>
+                <router-link to="/multiviewer"><li @click= "closeModal2"><i class="material-icons blue-icon">border_all</i><span>MultiViewer</span> </li></router-link>
                 <router-link to="/update"><li @click= "closeModal2"><i class="material-icons blue-icon">publish</i>Update Software<span></span></li></router-link>
 
             </ul>

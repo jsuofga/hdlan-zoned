@@ -5,7 +5,7 @@
         v-bind:zoneNumber = "zoneNumber" 
         v-bind:pingControllerStatus=  "pingControllerStatus"
     />
-    <Sidenav @msg-txSelected= "tx" @msg-remoteSelected= "remoteControl" v-bind:rxSelected= "rxSelected" v-bind:sourceNames= "sourceNames" v-bind:itachIPs = "itachIPs"  v-bind:stbQty = "stbQty" v-bind:tvNamesZones = "tvNamesZones"  v-bind:UserSwitchConfig  = "UserSwitchConfig"   /> 
+    <Sidenav @msg-txSelected= "tx" @msg-remoteSelected= "remoteControl" v-bind:rxSelected= "rxSelected" v-bind:sourceNames= "sourceNames" v-bind:itachIPs = "itachIPs"  v-bind:stbQty = "stbQty"  v-bind:multiviewerIPs = "multiviewerIPs"  v-bind:mavQty = "mavQty" v-bind:tvNamesZones = "tvNamesZones"  v-bind:UserSwitchConfig  = "UserSwitchConfig"   /> 
     <router-view 
         @msg-switchIp= "switchIp"
         @msg-rxSelected= "rx" 
@@ -25,6 +25,8 @@
         v-bind:userPresetsExist= "userPresetsExist"
         v-bind:itachIPs = "itachIPs" 
         v-bind:stbQty = "stbQty" 
+        v-bind:multiviewerIPs = "multiviewerIPs" 
+        v-bind:mvQty = "mvQty" 
         v-bind:favChNames  = "favChNames" 
         v-bind:favChStations  = "favChStations" 
         v-bind:remote  = "remote" 
@@ -53,6 +55,7 @@ import Capacitycontrol from "@/components/Capacitycontrol"
 import Update from "@/components/Update"
 import RemoteControl from "@/components/RemoteControl"
 import Itach from "@/components/Itach"
+import MultiViewer from "@/components/Multiviewer"
 import Favoritechannels from "@/components/Favoritechannels";
 
 export default {
@@ -72,7 +75,8 @@ export default {
     Update,
     RemoteControl,
     Itach,
-    Favoritechannels
+    Favoritechannels,
+    MultiViewer
 
   },
   watch:{
@@ -98,6 +102,8 @@ export default {
      pingControllerStatus:'ok',
      itachIPs:[],
      stbQty: [], // Number of set top boxes to be controlled by Itach 
+     multiviewerIPs:[],
+     mvQty: [], // Number of multiviewers
      favChNames:[], //
      favChStations:[], //
      remote: '' ,// remote control selected
@@ -152,6 +158,7 @@ export default {
         await this.get_UserPresets()
         await this.get_UserItachIPs()
         await this.get_UserFavChannels()
+        await this.get_UserMultiViewerIPs()
         await this.get_UserSwitchConfig()
     },
     get_zoneNames(){
@@ -267,6 +274,27 @@ export default {
              }
               this.stbQty = [...this.itachIPs.slice(-1)]
               this.itachIPs = [...this.itachIPs.slice(0,-1)]
+              
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+    },
+    get_UserMultiViewerIPs(){
+        this.multiviewerIPs = []
+        this.mvQty = []
+        const serverURL = `${location.hostname}:3000`
+        // Read from Server
+          fetch(`http://${serverURL}/read/UserMultiViewerIPs`, {method: 'GET',})
+          .then(response => response.json())
+          .then(result => {
+            console.log('Success:', result);
+             let item;
+             for( item in result){
+               this.multiviewerIPs.push(result[item])
+             }
+              this.mvQty = [...this.multiviewerIPs.slice(-1)]
+              this.multiviewerIPs = [...this.multiviewerIPs.slice(0,-1)]
               
           })
           .catch(error => {
