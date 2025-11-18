@@ -129,13 +129,13 @@ export default {
       this.switchIpAddress = payload.switchIp
     },
     status(payload){
-       console.log('status  =', payload)
+      //  console.log('status  =', payload)
        this.snmpStatus = payload
        this.serverIpAddress = payload.NodeRedIPAddress 
-       console.log('ip  =', this.serverIpAddress)
+      //  console.log('ip  =', this.serverIpAddress)
     },
     pingController(payload){
-       console.log('ping controller  =', payload)
+      //  console.log('ping controller  =', payload)
        this.pingControllerStatus = payload
     },
     sourceNamesUpdated(payload){
@@ -162,8 +162,8 @@ export default {
         await this.get_UserSwitchConfig()
     },
     get_zoneNames(){
+        this.zoneNames=[]
          const serverURL = `${location.hostname}:3000`
-         this.zoneNames=[]
         // Read from Server
           fetch(`http://${serverURL}/read/UserZoneNames`, {method: 'GET',})
           .then(response => response.json())
@@ -180,6 +180,25 @@ export default {
           });
 
     },
+    get_sourceNames(){
+        this.sourceNames = []
+        const serverURL = `${location.hostname}:3000`
+        // Read from Server
+          fetch(`http://${serverURL}/read/UserInputNames`, {method: 'GET',})
+          .then(response => response.json())
+          .then(result => {
+            // console.log('Success:', result);
+             let item;
+             for( item in result){
+               this.sourceNames.push(result[item])
+             }
+              console.log('Source names = ',this.sourceNames)
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+         
+    },
     get_tvZoneAssignment(){
         const serverURL = `${location.hostname}:3000`
         this.zones = [],
@@ -192,7 +211,7 @@ export default {
         fetch(`http://${serverURL}/read/UserTvNames`, {method: 'GET',})
         .then(response => response.json())
         .then(result => {
-          console.log('Success:', result);
+          // console.log('Success:', result);
             let item;
             for( item in result){
               this.zones.push(result[item].zone)
@@ -200,41 +219,22 @@ export default {
               this.tvNames.push(result[item].name)
               this.tvNamesZones.push(result[item])
             }
-            this.zoneNamesToDisplay = this.zoneNames
+            this.zoneNamesToDisplay = [...this.zoneNames]
             //check if if a RX is assigned to zone in zoneNames and save in zoneNamesToDisplay. 
             // this.zoneNames.forEach(item =>{
             //   if(this.zones.includes(item)){
             //     this.zoneNamesToDisplay.push(item)
             //   }
             // })
-            console.log( this.zones)
-            console.log( this.zonesId)
-            console.log( this.zoneNamesToDisplay)
-            console.log( this.tvNamesZones)
-            console.log( this.tvNames)
+            // console.log( this.zones)
+            // console.log( this.zonesId)
+            // console.log( this.zoneNamesToDisplay)
+            // console.log( this.tvNamesZones)
+            // console.log( this.tvNames)
         })
         .catch(error => {
           console.error('Error:', error);
         });
-    },
-    get_sourceNames(){
-        this.sourceNames = []
-        const serverURL = `${location.hostname}:3000`
-        // Read from Server
-          fetch(`http://${serverURL}/read/UserInputNames`, {method: 'GET',})
-          .then(response => response.json())
-          .then(result => {
-            console.log('Success:', result);
-             let item;
-             for( item in result){
-               this.sourceNames.push(result[item])
-             }
-              console.log(this.sourceNames)
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-         
     },
     get_UserPresets(){
       const serverURL = location.hostname
@@ -267,7 +267,7 @@ export default {
           fetch(`http://${serverURL}/read/UserItachIPs`, {method: 'GET',})
           .then(response => response.json())
           .then(result => {
-            console.log('Success:', result);
+            // console.log('Success:', result);
              let item;
              for( item in result){
                this.itachIPs.push(result[item])
@@ -288,7 +288,7 @@ export default {
           fetch(`http://${serverURL}/read/UserMultiViewerIPs`, {method: 'GET',})
           .then(response => response.json())
           .then(result => {
-            console.log('Success:', result);
+            // console.log('Success:', result);
              let item;
              for( item in result){
                this.multiviewerIPs.push(result[item])
@@ -309,7 +309,7 @@ export default {
           fetch(`http://${serverURL}/read/UserFavChannels`, {method: 'GET',})
           .then(response => response.json())
           .then(result => {
-             console.log("journey",result)
+            //  console.log("journey",result)
               let index = 0
               let item
               for(item in result){
@@ -325,8 +325,8 @@ export default {
             console.error('Error:', error);
           });
           
-        console.log("names:", this.favChNames)
-        console.log("stations:", this.favChStations)
+        // console.log("names:", this.favChNames)
+        // console.log("stations:", this.favChStations)
     },
     get_UserSwitchConfig(){
         const serverURL = `${location.hostname}:3000`
@@ -334,7 +334,7 @@ export default {
           fetch(`http://${serverURL}/read/UserSwitchConfig`, {method: 'GET',})
           .then(response => response.json())
           .then(result => {
-            console.log('Success:', result);
+            // console.log('Success:', result);
             this.UserSwitchConfig = result
           })
           .catch(error => {

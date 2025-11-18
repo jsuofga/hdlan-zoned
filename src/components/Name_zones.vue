@@ -12,9 +12,9 @@
             </div>
 
           <div class = 'listDiv'>
-                   <div class = "gridItem" v-for="(item,index) in zoneNames" :key="index">
+                   <div class = "gridItem" v-for="(item,index) in localZoneNames" :key="index">
                       <label>Zone{{index+1}}.</label> 
-                      <input class = 'inputFont' type="text" name = "zoneNames[index]" v-model= "zoneNames[index]" maxlength="10"> 
+                      <input class = 'inputFont' type="text" name = "localZoneNames[index]" v-model= "localZoneNames[index]" maxlength="10"> 
                       <span class = "trash"><i class="material-icons" v-on:click= "trash(index)">delete_forever</i></span>
                   </div>
           </div>
@@ -34,25 +34,38 @@
 
 export default {
     name: 'Name_zones',
-    //props:['zoneNames','tvNamesZones'],
       props:['zones','zonesId','zoneNames','tvNames'],
    
     watch:{
       sourceNames: function() {
-          this.$emit('msg-zoneNamesUpdated',this.zoneNames)
-      }
+          this.$emit('msg-zoneNamesUpdated',this.localZoneNames)
+      },
+
+      // Watches the incoming prop
+        zoneNames: {
+            handler(newZoneNames) {
+                // When the prop changes (i.e., when data finally arrives)
+                if (newZoneNames && newZoneNames.length > 0) {
+                    // Update the local data with a copy of the new data
+                    this.localZoneNames = [...newZoneNames];
+                }
+            },
+            immediate: true // Run the watcher once immediately on component load
+        }
     },
     data(){
         return{
           zoneName: '',
-          zoneNames:[]
+          localZoneNames:[...this.zoneNames],
+          localZonesId:[...this.zonesId],
+          localtvNames:[...this.tvNames]
         }
     },
     methods: {
       add(){
         //Check to make sure only maxium Zones created
-        if(this.zoneNames.length < 8){
-          this.zoneNames.push(this.zoneName)
+        if(this.localZoneNames.length < 8){
+          this.localZoneNames.push(this.zoneName)
           this.zoneName = ''
         //if zone exceed 8
         }else{
@@ -61,7 +74,7 @@ export default {
         }
       },
       trash(index){
-        this.zoneNames.splice(index,1)
+        this.localZoneNames.splice(index,1)
         //console.log(index)
       },
       save(e){
@@ -70,13 +83,13 @@ export default {
           const serverURL = `${location.hostname}:3000`
           // Read user inputs and save 
           let zoneInputNames = {}
-          this.zoneNames.forEach((item,index)=>{
+          this.localZoneNames.forEach((item,index)=>{
              zoneInputNames[`zone${index+1}`] = item ;
           })
        
           let tvNamesZones = []
-          this.tvNames.forEach((item,index)=>{
-             let tvAndzone = {rxId: index+1, name:item, zoneId: this.zonesId[index], zone:zoneInputNames[`zone${this.zonesId[index]}`]}
+          this.localtvNames.forEach((item,index)=>{
+             let tvAndzone = {rxId: index+1, name:item, zoneId: this.localZonesId[index], zone:zoneInputNames[`zone${this.localZonesId[index]}`]}
              tvNamesZones.push(tvAndzone) 
           })
           
@@ -134,7 +147,6 @@ form{
   background-color: white;
   border-radius:10px;
   width:90%;
-
 }
 #input{
   border:1px solid lightgray;
