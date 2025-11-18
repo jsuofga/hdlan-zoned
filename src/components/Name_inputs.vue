@@ -10,9 +10,9 @@
             </div>
 
           <div class = 'listDiv'>
-                   <div class = "gridItem" v-for="(item,index) in sourceNames" :key="index">
-                      <label v-bind:for= "sourceNames[index]">TX{{index+1}}</label>
-                      <input class = 'inputFont' type="text" name = "sourceNames[index]" v-model= "sourceNames[index]" maxlength="10">
+                   <div class = "gridItem" v-for="(item,index) in localSourceNames" :key="index">
+                      <label v-bind:for= "localSourceNames[index]">TX{{index+1}}</label>
+                      <input class = 'inputFont' type="text" name = "localSourceNames[index]" v-model= "localSourceNames[index]" maxlength="10">
                       <span class = "trash"><i class="material-icons" v-on:click= "trash(index)">delete_forever</i></span>
                   </div>
           </div>
@@ -31,13 +31,15 @@ export default {
     name: 'Name_inputs',
     props:['sourceNames','snmpStatus'],
     watch:{
-      sourceNames: function() {
-          this.$emit('msg-sourceNamesUpdated',this.sourceNames)
+      localSourceNames: function() {
+          this.$emit('msg-sourceNamesUpdated',this.localSourceNames)
       }
     },
     data(){
         return{
-          
+          // 1. Create a local copy of the prop
+          localSourceNames: [...this.sourceNames], // Use spread syntax for a shallow copy
+          sourceName: '' // Initialize the input model
         }
     },
     methods: {
@@ -45,11 +47,11 @@ export default {
       add(){
         if(this.snmpStatus.txCount == 0){
           // switch configured as RX only switch. 
-           this.sourceNames.push(this.sourceName)
+           this.localSourceNames.push(this.sourceName)
            this.sourceName = ''
         }else{
-           if(this.sourceNames.length < this.snmpStatus.txCount){
-           this.sourceNames.push(this.sourceName)
+           if(this.localSourceNames.length < this.snmpStatus.txCount){
+           this.localSourceNames.push(this.sourceName)
            this.sourceName = ''
         //if inputs exceeds number of txPorts on switch
           }else{
@@ -60,7 +62,7 @@ export default {
 
       },
       trash(index){
-        this.sourceNames.splice(index,1)
+        this.localSourceNames.splice(index,1)
         //console.log(index)
 
       },
@@ -73,7 +75,7 @@ export default {
 
           // Read user inputs and save 
           let videoInputNames = {}
-          this.sourceNames.forEach((item,index)=>{
+          this.localSourceNames.forEach((item,index)=>{
              videoInputNames[`in${index+1}`] = item ;
           })
           console.log('ir favorites', videoInputNames)
