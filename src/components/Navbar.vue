@@ -13,22 +13,17 @@
             </ul>
              <span v-if= "snmpStatus.SwitchPingTest === 'fail'" class="new badge red" data-badge-caption="switch not detected!"></span>
              <span v-if= "pingControllerStatus === 'fail'" class="new badge red" data-badge-caption="HDLAN Controller not detected!"></span>
-             <span v-if= "snmpStatus.PoE === 0 " class="new badge red" data-badge-caption="No PoE Power"></span>
-            <span class="right">AVLAN 100625&nbsp;&nbsp;</span>
+             <!-- <span v-if= "snmpStatus.PoE === 0 " class="new badge red" data-badge-caption="No PoE Power"></span> -->
+            <span class="right">AVLAN 111825&nbsp;&nbsp;</span>
         </div>
     </nav>
 
     <!-- Modal Structure -->
     <div id="modal1" class="modal">
-             <h5 class = 'center-align'>Power</h5>
-             <div id = 'power' class = 'valign-wrapper'>
-                    <button @click= "PoE('on')" class="waves-effect waves-light btn green center-align">PoE On</button>
-                    <button @click= "PoE('off')" class="waves-effect waves-light btn red center-align">PoE Off</button>
-             </div>
 
             <br>
             <h5 id='admin-settings-title' class = 'center-align'>Admin Access</h5>
-            <small>
+            <small  class = 'center-align'>
                 Be fair. The HDLAN Controller Software is licensed, not sold, to you solely for use with the Octava Video Over IP System.
                 You may not publish, copy,any portion of the Software,unless otherwise permitted by law.
             </small>
@@ -38,35 +33,32 @@
                 <input name="admin" v-model= "admin" placeholder="Enter admin password" type="text" required autocomplete="off" >
             </div>
 
-            <div class="modal-footer">
+            <div class=" modal-content-settings ">
                 <a @click= "closeModal1" class="modal-close waves-effect waves-light btn red">Cancel</a>
                 <a @click= "submit" class="modal-close waves-effect waves-light btn blue ">Submit</a>
             </div>
     </div>
 
     <div id="modal2" class="modal">
-        <div class="modal-content-settings center-align">
+        <i class="material-icons red-text card-close-btn" @click= "closeModal2">close</i>
+        <div class="modal-content-settings center-align ">
             <ul class = "center-align">
                 <router-link to="/ipaddress"><li @click= "closeModal2('synch')"><i class="material-icons blue-icon">router</i><span>Sync Switch</span></li></router-link>
                 <router-link to="/name-zones"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Zones/Groups</span> </li></router-link>
                 <router-link to="/name-inputs"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Video Inputs</span></li></router-link>
                 <router-link to="/name-outputs"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Video Outputs</span></li></router-link>
-                <router-link to="/timer"><li @click= "closeModal2"><i class="material-icons blue-icon">alarm_add</i>Timer PoE On/Off <span></span></li></router-link>
-                <!-- <router-link to="/capacitycontrol"><li @click= "closeModal2"><i class="material-icons blue-icon"> directions_walk</i><span>Capacity Control</span></li></router-link> -->
+                <router-link v-if ="/-.*p/i.test(snmpStatus.model)" to="/timer"><li @click= "closeModal2"><i class="material-icons blue-icon">alarm_add</i>Timer PoE On/Off <span></span></li></router-link>
                 <li @click= "savePreset(1)" ><router-link to=""><i class="material-icons blue-icon"> save</i><span>Save to Preset 1</span></router-link></li>
                 <li @click= "savePreset(2)" ><router-link to=""><i class="material-icons blue-icon">save</i><span>Save to Preset 2</span> </router-link></li>
                 <li @click= "savePreset(3)" ><router-link to=""><i class="material-icons blue-icon">save</i><span>Save to Preset 3</span> </router-link></li>
                 <router-link to="/itach"><li @click= "closeModal2"><i class="material-icons blue-icon">router</i><span>Global Cache Itach</span> </li></router-link>
                 <router-link to="/favoritechannels"><li @click= "closeModal2"><i class="material-icons blue-icon">settings_remote</i><span>Channels Favorite</span> </li></router-link>
-                <router-link to="/multiviewer"><li @click= "closeModal2"><i class="material-icons blue-icon">border_all</i><span>MultiViewer</span> </li></router-link>
+                <!-- <router-link to="/multiviewer"><li @click= "closeModal2"><i class="material-icons blue-icon">border_all</i><span>MultiViewer</span> </li></router-link> -->
                 <router-link to="/update"><li @click= "closeModal2"><i class="material-icons blue-icon">publish</i>Update Software<span></span></li></router-link>
 
             </ul>
         </div>
-            <div class="modal-footer">
-                <a id='cancelBtn' @click= "closeModal2" class="modal-close waves-effect waves-light btn red">Cancel</a>
-               
-            </div>
+
     </div>
 
 
@@ -84,6 +76,8 @@ export default {
         return {
             admin:'',
             showZoneTitle: false,
+            modalInstance1: null, // Holds the Materialize instance for modal1
+            modalInstance2: null, // Holds the Materialize instance for modal2
         }
     },
     watch:{
@@ -166,7 +160,21 @@ export default {
 
         const modal2 = document.getElementById('modal2')
         this.modalInstance2 = M.Modal.init(modal2);
+    },
+    beforeDestroy() {
+    // 1. Check if the instance exists before trying to destroy it.
+    if (this.modalInstance1) {
+        // Calls Materialize's cleanup function, removing event listeners and memory residue.
+        this.modalInstance1.destroy();
+        console.log('Modal 1 destroyed successfully.');
     }
+    
+    // 2. Destroy the second modal instance.
+    if (this.modalInstance2 ) {
+        this.modalInstance2.destroy();
+        console.log('Modal 2 destroyed successfully.');
+    }
+}
 
 }
 </script>
@@ -175,21 +183,6 @@ export default {
     .nav-extended{
         /* background-color: rgb(28,28,30); */
         background-color: rgb(66, 66, 66);
-    }
-    #power{
-        display:flex;
-        justify-content: center ;
-        align-items: center;
-        margin-top:20px;
-        margin-left:100px;
-        margin-right:100px;
-        height: 15%;
-        border:1px solid lightgray;
-        border-radius: 10px;
-    }
-    button{
-        margin-left:20px;
-        margin-right:20px;
     }
     .blue-icon{
         color:#2196f3 !important;
@@ -211,9 +204,9 @@ export default {
     }
      .modal-content-settings {
         display:flex;
-        justify-content: center ;
+        justify-content:space-evenly ;
         align-items: center ;
-            
+
     }
     .modal-content-settings li{
         margin:10px;
@@ -222,13 +215,22 @@ export default {
         padding-left:20px;
         padding-right:20px;
     }
+
     li:hover {
         background-color:lightskyblue
     }
-    #cancelBtn{
-        margin-right:25px
-    }
+
     input[type=text]:focus{
      border-bottom: 1px solid #2196f3 !important ;
     }
-</style>
+    .card-relative {
+    position: relative; /* Makes this the reference point for absolute positioning */
+    }
+    .card-close-btn {
+        position:absolute;
+        top: 10px;    /* Adjust as needed to position from the top edge */
+        left: 10px;  /* Adjust as needed to position from the right edge */
+        z-index: 1050; 
+        cursor: pointer;
+    }
+    </style>

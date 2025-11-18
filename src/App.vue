@@ -158,7 +158,7 @@ export default {
         await this.get_UserPresets()
         await this.get_UserItachIPs()
         await this.get_UserFavChannels()
-        await this.get_UserMultiViewerIPs()
+   //     await this.get_UserMultiViewerIPs() //
         await this.get_UserSwitchConfig()
     },
     get_zoneNames(){

@@ -1,10 +1,8 @@
 <template>
   <div class="name-inputs box ">
-     
       <form >
             <h5>Add Video Input </h5>
             <div class="field">
-                <!-- <label for="Video Input"></label> -->
                 <div class = 'inputDiv' > 
                       <input id = 'input' name="input" v-model= "sourceName" placeholder="Enter Name of Video Input to add" type="text" required maxlength="10">
                       <span class = "add"><i class="material-icons" v-on:click= "add">add</i></span>
@@ -23,11 +21,8 @@
                 <button v-on:click = "cancel" class="waves-effect red waves-light btn">Cancel</button>
                 <button v-on:click = "save" class="waves-effect waves-light btn blue">Update/Save</button>
           </div>
-
       </form>
-
   </div>
-
 </template>
 
 <script>
@@ -97,7 +92,7 @@ export default {
   },
   //Life Cycle Hooks
     mounted(){
-        M.AutoInit() // For Materialize to work!
+        // M.AutoInit() // For Materialize to work!
         window.scrollTo(0, 0) //Top of page
     }
 }   

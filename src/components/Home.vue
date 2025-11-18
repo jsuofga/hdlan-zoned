@@ -1,12 +1,22 @@
 <template>
  <div class="home">
-      <!-- <div v-if= "oneZoneOnly === 0" class = "welcome"> -->
+
+
+    <!-- This banner appears only when PoE Power is 0 (off) -->
+    <div v-if= "snmpStatus.PoE === 0 && /-.*p/i.test(snmpStatus.model)"  id="poe-off-banner">
+        <h5 >PoE Power is OFF</h5>
+        <button @click="PoE('on')" class="waves-effect waves-light btn green ">
+            TURN PoE ON
+        </button>
+        <h5 v-if = "showWaiting" class = "red-text"> Wait. PoE Power Turning On</h5>
+    </div>
+    <!-- END NEW BANNER -->
+      
       <div v-if= "zoneNamesToDisplay.length === 0" class = "welcome">
         <h3>Welcome</h3>
         <h3>Goto settings to add displays to system</h3>
           
       </div>
-      <!-- <div v-else-if= "oneZoneOnly === 1" class = "single-zone" > -->
       <div v-else-if= "zoneNamesToDisplay.length === 1" class = "single-zone" >
             <div @click= "showZone(item,index)" class = "waves-effect waves-light roundBtn btn-large" v-for="(item,index) in zoneNamesToDisplay" :key="index">{{zoneNamesToDisplay[index]}}</div>
             <div @click= "switchAll" data-target="slide-out" class="waves-effect waves-light roundBtn btn-large sidenav-trigger">ALL TVs</div>
@@ -30,6 +40,11 @@
         </ul>
     </div>
 
+ <div id = 'power' class = 'valign-wrapper' v-if="/-.*p/i.test(snmpStatus.model)">
+          <button @click= "PoE('on')" class ="power-btn-relative waves-effect waves-light btn green roundLeft center-align">PoE On <small v-if = "snmpStatus.ontime !== ''" class = 'power-info'>{{snmpStatus.ontime}}</small></button>
+          <button @click= "PoE('off')" class="power-btn-relative waves-effect waves-light btn red roundRight center-align">PoE Off <small v-if = "snmpStatus.offtime !== ''" class = 'power-info'>{{snmpStatus.offtime}}</small></button>
+  </div> 
+
 </div>
 
 </template>
@@ -40,21 +55,11 @@ export default {
   props: ['snmpStatus','zoneNamesToDisplay','userPresetsExist','sourceNames','tvNames'],
   data () {
     return {
-
+      showWaiting:false
     }
   },
   computed:{
-      // oneZoneOnly: function(){
-      //   console.log("length:",this.zoneNamesToDisplay.length)
-      //    if(this.zoneNamesToDisplay.length == 0){
-      //      return (0)
-      //    }else if (this.zoneNamesToDisplay.length == 1){
-      //      return (1)
-      //    }
-      //    else{
-      //      return (false)
-      //    }
-      // }
+
   },
   methods:{
          showZone(item,index){
@@ -74,7 +79,6 @@ export default {
                 M.toast({ html: `Switch to Mix Mode `, classes: "rounded orange" })
               })
               .catch(error => console.log(error)); 
-  
         },
          switchPreset(preset){
            const serverURL = location.hostname
@@ -97,11 +101,36 @@ export default {
           }
         },
 
+      PoE(on_off){
+            const serverURL = `${location.hostname}:1880`
+            this.showWaiting = true // Set immediately to show the message
+
+            // Start a minimum 55-second timer for the message display
+            const minDisplayTime = 10000; 
+            const startTime = Date.now(); 
+
+            // Send the network request
+            fetch( `http://${serverURL}/poe/${on_off}`)
+            .then(()=> {
+                M.toast({ html: `PoE Power ${on_off}`, classes: "rounded blue" })
+            })
+            .catch(error => console.log(error))
+            .finally(() => { 
+              // Calculate how long we need to wait to meet the minimum display time
+              const elapsedTime = Date.now() - startTime;
+              const remainingTime = minDisplayTime - elapsedTime;
+
+              // Wait the remaining time (or 0 if the request took longer than 3s)
+              setTimeout(() => {
+                  this.showWaiting = false 
+              }, Math.max(0, remainingTime)); // Use Math.max to prevent negative time
+            });
+          }
   },
 
   //Life Cycle Hooks
   mounted(){
-        M.AutoInit() // For Materialize to work!
+        // M.AutoInit() // For Materialize to work!
         window.scrollTo(0, 0) //Top of page
   }
 
@@ -115,7 +144,7 @@ export default {
   align-items: center;
   width: 100%;
   height:100vh;
-  position:absolute;
+  /* position:absolute; */
 }
 .welcome{
   color:white;
@@ -160,4 +189,41 @@ export default {
   background-color:#2196f3 !important;
 }
 
+#power{
+  position:absolute;
+  left:10px;
+  bottom:10px;
+}
+.power-btn-relative{
+  position:relative;
+}
+.power-info{
+  position:absolute;
+  right:0.25rem;
+  top:-.75rem;
+  font-size: 0.5rem;
+}
+
+#poe-off-banner{
+  background-color: white;
+  display:flex;
+  position:absolute;
+  top:10%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index:10;
+  width: 50%;
+  height:50vh;
+}
+.roundLeft{
+  /* Rounds the top-left and bottom-left corners */
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+.roundRight{
+  /* Rounds the top-right and bottom-right corners */
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
 </style>

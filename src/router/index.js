@@ -15,8 +15,8 @@ import Update from "@/components/Update";
 import RemoteControl from "@/components/RemoteControl";
 import Itach from "@/components/Itach";
 import Favoritechannels from "@/components/Favoritechannels";
-import Multiviewer from "@/components/Multiviewer";
-import MultiViewControl from "@/components/MultiViewControl";
+// import Multiviewer from "@/components/Multiviewer";
+// import MultiViewControl from "@/components/MultiViewControl";
 
 
 Vue.use(Router)
@@ -94,16 +94,16 @@ export default new Router({
       name: 'itach',
       component: Itach
     },
-    {
-      path: '/multiviewer',
-      name: 'multiviewer',
-      component: Multiviewer
-    },
-    {
-      path: '/multiviewcontrol',
-      name: 'multiviewcontrol',
-      component: MultiViewControl
-    },
+    // {
+    //   path: '/multiviewer',
+    //   name: 'multiviewer',
+    //   component: Multiviewer
+    // },
+    // {
+    //   path: '/multiviewcontrol',
+    //   name: 'multiviewcontrol',
+    //   component: MultiViewControl
+    // },
     {
       path: '/favoritechannels',
       name: 'favoritechannels',

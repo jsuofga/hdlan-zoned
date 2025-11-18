@@ -130,7 +130,7 @@ export default {
   },
   //Life Cycle Hooks
     mounted(){
-        M.AutoInit() // For Materialize to work!
+        // M.AutoInit() // For Materialize to work!
         window.scrollTo(0, 0) //Top of page
   }
 }   

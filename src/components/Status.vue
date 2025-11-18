@@ -20,7 +20,9 @@ export default {
   methods:{
      
       getStatus(){
+      
         const serverURL_ciscoStat = `${location.hostname}:1880/ciscoStat`
+        //
         fetch(`http://${serverURL_ciscoStat}`)
         .then(function(response) {
             return response.json();
@@ -84,8 +86,20 @@ export default {
       this.getStatus()
       this.getUserInputNames()
       this.getUserTvZoneNames()
-      setInterval(this.getStatus, 5000)
-  }
+      this.interval_getStatus = setInterval(() => {
+          this.getStatus()
+      }, 5000)
+      // Get PoE Timer saved and send to SchedX node in Node Red by sending:
+      this.interval_poeTimer = setInterval(() => {
+          const serverURL = `${location.hostname}:1880`
+          fetch(`http://${serverURL}/timer/poe`)
+      }, 1*60*1000)
+  },
+  beforeDestroy() {
+      console.log('this.interval_getStatus')
+      clearInterval(this.interval_getStatus)
+      clearInterval(this.interval_poeTimer)
+}
 
 }
 </script>

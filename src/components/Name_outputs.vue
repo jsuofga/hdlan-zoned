@@ -3,8 +3,6 @@
 
     <div class = 'formContainer'>
         <h5 class = "center-align">Add Displays </h5>
-<!-- 
-        <div id = 'zoneMenu' class = 'field' > -->
         <div class = 'zoneMenu' > 
          <label class="center-align"><strong>Pick zone for display</strong> </label>
           <div class = 'zoneSelect'>
@@ -14,7 +12,6 @@
                     <span>{{item}}</span>
                   </label>
               </p>
-              
           </div>
         </div>
 
