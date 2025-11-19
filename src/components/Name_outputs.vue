@@ -6,7 +6,7 @@
         <div class = 'zoneMenu' > 
          <label class="center-align"><strong>Pick zone for display</strong> </label>
           <div class = 'zoneSelect'>
-              <p @click= "zoneSelect(item,index)" v-for="(item,index) in zoneNames" :key="index">
+              <p @click= "zoneSelect(item,index)" v-for="(item,index) in localZoneNames" :key="index">
                   <label>
                     <input name="group1" type="radio"/>
                     <span>{{item}}</span>
@@ -21,9 +21,9 @@
         </div>
 
         <div class = 'listDiv'>
-              <div class = "gridItem" v-for="(item,index) in tvNames" :key="index">
-                  <p>RX{{index+1}} @ Port {{UserSwitchConfig.TXports + (index+1)}}</p>
-                  <p>{{tvNames[index]}}</p>
+              <div class = "gridItem" v-for="(item,index) in localtvNames" :key="index">
+                  <p>RX{{index+1}} @ Port {{localUserSwitchConfig.TXports + (index+1)}}</p>
+                  <p>{{localtvNames[index]}}</p>
                   <span class = "edit"><i class="material-icons modal-trigger" href="#modal3" v-on:click= "edit(index)">edit</i></span>
                   <small>Zone-{{zones[index]}}</small>
                   <span class = "trash"><i class="material-icons" v-on:click= "trash(index)">delete_forever</i></span>
@@ -40,11 +40,11 @@
               <div id="modal3" class="modal">
                 <div class="modal-content">
                   <h4 class = "center-align" >TV {{id + 1}}</h4>
-                    <label v-bind:for= "tvNames[id]">TV{{id+1}} Name.</label>
-                    <input class = 'inputFont' type="text" name = "tvNames[id]" v-model= "tvNames[id]" maxlength="10">
+                    <label v-bind:for= "localtvNames[id]">TV{{id+1}} Name.</label>
+                    <input class = 'inputFont' type="text" name = "localtvNames[id]" v-model= "localtvNames[id]" maxlength="10">
    
                   <div class = 'ModalzoneSelect'>
-                    <p @click= "zoneSelect(item,index)" v-for="(item,index) in zoneNames" :key="index">
+                    <p @click= "zoneSelect(item,index)" v-for="(item,index) in localZoneNames" :key="index">
                         <label>
                           <input name="group1" type="radio"/>
                           <span>{{item}}</span>
@@ -68,12 +68,69 @@ export default {
     name: 'Name_outputs',
     props:['zones','zonesId','zoneNames','tvNames','UserSwitchConfig'],
     watch:{
+      // ---  Watcher for zones Prop ---
+        zones: {
+            handler(newZones) {
+                if (newZones && newZones.length > 0) {
+                    this.localZones = [...newZones]; // Create local copy
+                }
+            },
+            immediate: true
+        },
+
+        // ---  Watcher for zonesId Prop ---
+        zonesId: {
+            handler(newZonesId) {
+                if (newZonesId && newZonesId.length > 0) {
+                    this.localZonesId = [...newZonesId]; // Create local copy
+                }
+            },
+            immediate: true
+        },
+        tvNames: {
+            handler(newTvNames) {
+                if (newTvNames && newTvNames.length > 0) {
+                    this.localtvNames = [...newTvNames]; // Create local copy
+                }
+            },
+            immediate: true
+        },
+      // Watches the incoming prop
+        zoneNames: {
+            handler(newZoneNames) {
+                // When the prop changes (i.e., when data finally arrives)
+                if (newZoneNames && newZoneNames.length > 0) {
+                    // Update the local data with a copy of the new data
+                    this.localZoneNames = [...newZoneNames];
+                }
+            },
+            immediate: true // Run the watcher once immediately on component load
+        },
+          UserSwitchConfig: {
+            handler(newUserSwitchConfig) {
+                // Check 1: Ensure it's not null/undefined
+                // Check 2: Ensure it has keys (i.e., it's not just {})
+                if (newUserSwitchConfig && Object.keys(newUserSwitchConfig).length > 0) {
+                    // Update the local data with a deep copy of the object's properties
+                    // Use the spread operator for a shallow copy of properties
+                    this.localUserSwitchConfig = { ...newUserSwitchConfig }; 
+                }
+            },
+            immediate: true
+    }
     },
     data(){
         return{
           tvName: null,
           zone:null,
-          id:''  // RX selected for editing . ID = 0 is RX1, ID = 1 is RX2
+          id:'',  // RX selected for editing . ID = 0 is RX1, ID = 1 is RX2
+           //  Create a local copy of the prop
+          localZones: [],
+          localZonesId:[],
+          localtvNames:[],
+          localZoneNames:[],
+          localUserSwitchConfig:{}
+          
         }
     },
     methods: {
@@ -81,15 +138,15 @@ export default {
           // console.log('zoneSelect',index)
           this.zoneId = index+1
           this.zone = item  
-          this.zones[this.id] = this.zone
-          this.zonesId[this.id] = index +1
+          this.localZones[this.id] = this.zone
+          this.localZonesId[this.id] = index +1
           this.$forceUpdate()
       },
       add(){
-          if(this.tvNames.length < this.UserSwitchConfig.RXports){
-           this.tvNames.push(this.tvName)
-           this.zones.push(this.zone)
-           this.zonesId.push(this.zoneId)
+          if(this.localtvNames.length < this.localUserSwitchConfig.RXports){
+           this.localtvNames.push(this.tvName)
+           this.localZones.push(this.zone)
+           this.localZonesId.push(this.zoneId)
            this.tvName = ''
           //if inputs exceeds number of rxCount on switch
         }else{
@@ -103,7 +160,7 @@ export default {
         this.id = index
       },
       trash(index){
-        this.tvNames.splice(index,1)
+        this.localtvNames.splice(index,1)
         //console.log(index)
       },
       save(e){
@@ -113,8 +170,8 @@ export default {
           const serverURL = `${location.hostname}:3000`
           // Read user inputs and save
           let tvNamesZones = []
-          this.tvNames.forEach((item,index)=>{
-             let tvAndzone = {rxId: index+1, name:item, zoneId: this.zonesId[index], zone:this.zones[index]}
+          this.localtvNames.forEach((item,index)=>{
+             let tvAndzone = {rxId: index+1, name:item, zoneId: this.localZonesId[index], zone:this.localZones[index]}
              tvNamesZones.push(tvAndzone) 
           })
           console.log(tvNamesZones)
