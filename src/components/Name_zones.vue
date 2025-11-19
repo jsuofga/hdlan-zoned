@@ -34,10 +34,10 @@
 
 export default {
     name: 'Name_zones',
-      props:['zones','zonesId','zoneNames','tvNames'],
+      props:['zonesId','zoneNames','tvNames'],
    
     watch:{
-      sourceNames: function() {
+      localZoneNames: function() {
           this.$emit('msg-zoneNamesUpdated',this.localZoneNames)
       },
 
@@ -51,14 +51,32 @@ export default {
                 }
             },
             immediate: true // Run the watcher once immediately on component load
+        },
+        // --- Watcher for zonesId Prop ---
+        zonesId: {
+            handler(newZonesId) {
+                if (newZonesId && newZonesId.length > 0) {
+                    this.localZonesId = [...newZonesId];
+                }
+            },
+            immediate: true
+        },
+        // --- Watcher for tvNames Prop ---
+        tvNames: {
+            handler(newTvNames) {
+                if (newTvNames && newTvNames.length > 0) {
+                    this.localtvNames = [...newTvNames];
+                }
+            },
+            immediate: true
         }
     },
     data(){
         return{
           zoneName: '',
-          localZoneNames:[...this.zoneNames],
-          localZonesId:[...this.zonesId],
-          localtvNames:[...this.tvNames]
+          localZoneNames: [],
+          localZonesId: [],
+          localtvNames: []
         }
     },
     methods: {
