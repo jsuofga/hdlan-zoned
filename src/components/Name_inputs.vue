@@ -2,6 +2,7 @@
   <div class="name-inputs box ">
       <form >
             <h5>Add Video Input </h5>
+            
             <div class="field">
                 <div class = 'inputDiv' > 
                       <input id = 'input' name="input" v-model= "sourceName" placeholder="Enter Name of Video Input to add" type="text" required maxlength="10">
@@ -33,24 +34,47 @@ export default {
     watch:{
       localSourceNames: function() {
           this.$emit('msg-sourceNamesUpdated',this.localSourceNames)
-      }
+      },
+      sourceNames: {
+            handler(newSourceNames) {
+                // Only update the local copy if the incoming data is non-empty
+                if (newSourceNames && newSourceNames.length > 0) {
+                    this.localSourceNames = [...newSourceNames];
+                }
+            },
+            // CRITICAL: Runs immediately on component load to catch initial/async data
+            immediate: true 
+        },
+        snmpStatus: {
+            handler(newsnmpStatus) {
+                // Only update the local copy if the incoming data is non-empty
+              if (newsnmpStatus && Object.keys(newsnmpStatus).length > 0) { 
+                  this.localsnmpStatus = {...newsnmpStatus};
+              }
+            },
+            // CRITICAL: Runs immediately on component load to catch initial/async data
+            immediate: true 
+        },
     },
     data(){
         return{
           // 1. Create a local copy of the prop
-          localSourceNames: [...this.sourceNames], // Use spread syntax for a shallow copy
+          localSourceNames: [], // Use spread syntax for a shallow copy
+          localsnmpStatus:{},
           sourceName: '' // Initialize the input model
         }
     },
     methods: {
       
       add(){
-        if(this.snmpStatus.txCount == 0){
+       
+        if(this.localsnmpStatus.txCount == 0){
           // switch configured as RX only switch. 
            this.localSourceNames.push(this.sourceName)
            this.sourceName = ''
         }else{
-           if(this.localSourceNames.length < this.snmpStatus.txCount){
+           if(this.localSourceNames.length < this.localsnmpStatus.txCount){
+          
            this.localSourceNames.push(this.sourceName)
            this.sourceName = ''
         //if inputs exceeds number of txPorts on switch
