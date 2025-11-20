@@ -236,8 +236,5 @@ input[type=text]:focus{
     color: black;
     transform: scale(.8);
 }
-.rounded{
-  border-radius: 6px;
-}
 
 </style>

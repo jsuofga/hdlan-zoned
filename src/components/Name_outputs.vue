@@ -17,15 +17,15 @@
 
         <div class = 'field inputDiv' >
               <input id = 'input' name="input" v-model= "tvName" placeholder="Enter Name of TV to add" type="text" maxlength="10">
-              <span class = "add"><i class="material-icons" v-on:click= "add">add</i></span>
+              <div class = "add waves-light " @click = "add()"><i class="material-icons waves-effect left">add</i>Add Display</div>
         </div>
-
+        <div v-if = "rxNameError != ''" class = 'red-text'>{{rxNameError}}</div>
         <div class = 'listDiv'>
               <div class = "gridItem" v-for="(item,index) in localtvNames" :key="index">
                   <p>RX{{index+1}} @ Port {{localUserSwitchConfig.TXports + (index+1)}}</p>
                   <p>{{localtvNames[index]}}</p>
                   <span class = "edit"><i class="material-icons modal-trigger" href="#modal3" v-on:click= "edit(index)">edit</i></span>
-                  <small>Zone-{{zones[index]}}</small>
+                  <small>Zone-{{localZones[index]}}</small>
                   <span class = "trash"><i class="material-icons" v-on:click= "trash(index)">delete_forever</i></span>
               </div>
         </div>
@@ -36,29 +36,29 @@
         </div> 
 
     </div >
-              <!-- Modal Structure -->
-              <div id="modal3" class="modal">
-                <div class="modal-content">
-                  <h4 class = "center-align" >TV {{id + 1}}</h4>
-                    <label v-bind:for= "localtvNames[id]">TV{{id+1}} Name.</label>
-                    <input class = 'inputFont' type="text" name = "localtvNames[id]" v-model= "localtvNames[id]" maxlength="10">
-   
-                  <div class = 'ModalzoneSelect'>
-                    <p @click= "zoneSelect(item,index)" v-for="(item,index) in localZoneNames" :key="index">
-                        <label>
-                          <input name="group1" type="radio"/>
-                          <span>{{item}}</span>
-                        </label>
-                    </p>
-                  </div>
-
-                </div>
-                <div class="modal-footer">
-                    <a class= "modal-close waves-effect waves-light btn blue">OK</a>
-                </div>
+          <!-- Modal Structure -->
+          <div id="modal3" class="modal">
+            <div class="modal-content">
+              <h4 class = "center-align" >TV {{id + 1}}</h4>
+                <label v-bind:for= "localtvNames[id]">TV{{id+1}} Name.</label>
+                <input class = 'inputFont' type="text" name = "localtvNames[id]" v-model= "localtvNames[id]" maxlength="10">
+              <div class = 'ModalzoneSelect'>
+                <p @click= "zoneSelect(item,index)" v-for="(item,index) in localZoneNames" :key="index">
+                    <label>
+                      <input name="group1"
+                        type="radio"
+                        :checked="localZones[id] === item"
+                        />
+                      <span>{{item}}</span>
+                    </label>
+                </p>
               </div>
-
-  </div>
+            </div>
+            <div class="modal-footer">
+                <a class= "modal-close waves-effect waves-light btn blue">OK</a>
+            </div>
+          </div>
+    </div>
 
 </template>
 
@@ -121,39 +121,79 @@ export default {
     },
     data(){
         return{
-          tvName: null,
-          zone:null,
+          tvName: '',
+          zone:'',
           id:'',  // RX selected for editing . ID = 0 is RX1, ID = 1 is RX2
            //  Create a local copy of the prop
           localZones: [],
           localZonesId:[],
           localtvNames:[],
           localZoneNames:[],
-          localUserSwitchConfig:{}
+          localUserSwitchConfig:{},
+          rxNameError:''
           
         }
     },
     methods: {
       zoneSelect(item,index){
-          // console.log('zoneSelect',index)
-          this.zoneId = index+1
-          this.zone = item  
-          this.localZones[this.id] = this.zone
-          this.localZonesId[this.id] = index +1
-          this.$forceUpdate()
+        // 'index+1' is the zone ID (1, 2, 3...)
+        this.zoneId = index + 1
+        this.zone = item  
+        // **Crucial: Updates the zone for the TV/RX currently being edited (via this.id)**
+        const editIndex = Number(this.id);
+        this.$set(this.localZones, editIndex, this.zone);
+        this.$set(this.localZonesId, editIndex, this.zoneId);
       },
       add(){
-          if(this.localtvNames.length < this.localUserSwitchConfig.RXports){
-           this.localtvNames.push(this.tvName)
-           this.localZones.push(this.zone)
-           this.localZonesId.push(this.zoneId)
-           this.tvName = ''
-          //if inputs exceeds number of rxCount on switch
-        }else{
-          alert('Exceeded number of RX ports')
-          this.tvName  = ''
+         // Reset error message at the start of the attempt
+        this.rxNameError = '' 
+        
+        const name =  this.tvName.trim()// Trim whitespace, handle null/undefined
+
+        // --- 1. Check for Empty TV Name ---
+        if (!name) {
+            this.rxNameError = 'TV/Receiver name cannot be empty.'
+            this.tvName = '' 
+            return
         }
-      },
+        // --- 2. Check for Duplicate TV Name (Case-insensitive) ---
+        if (this.localtvNames.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
+            this.rxNameError = `A TV/Receiver named "${name}" already exists.`
+            this.tvName = '' 
+            return
+        }
+        // --- 3. Check for Zone Selection ---
+        // Note: this.zone and this.zoneId are set via UI interaction (e.g., a dropdown)
+        if (!this.zone || !this.zoneId) {
+            this.rxNameError = 'You must select a Zone for the new TV/Receiver.'
+            return
+        }
+        // --- 4. Check for Max RX Port Limit ---
+        const maxRxPorts = this.localUserSwitchConfig.RXports;
+
+        if (this.localtvNames.length < maxRxPorts) {
+            // SUCCESS: Add the data
+            this.localtvNames.push(name)
+            this.localZones.push(this.zone)
+            this.localZonesId.push(this.zoneId)
+            
+            // Clear inputs and selections
+            this.tvName = '' 
+            this.zone = ''
+            this.zoneId = ''
+            // 2. Uncheck all radio buttons with the name 'group1' in the DOM.
+            const radioButtons = document.getElementsByName('group1');
+            radioButtons.forEach(radio => {
+                radio.checked = false;
+            });
+
+        } else {
+            // Limit exceeded
+            this.rxNameError = `Exceeded maximum of ${maxRxPorts} available RX ports.`
+            this.tvName = '' 
+        }
+    },
+  
       edit(index){
         //this.tvNames.splice(index,1)
         // console.log(index)
@@ -281,8 +321,12 @@ input[type=text]:focus{
 .add{
     position:absolute;
     right: 10px;
-    top: 10px;
+    top: 10%;
     cursor: pointer;
+    color:white;
+    border-radius: 6px;
+    padding: 5px;
+    background-color:#2196f3
 }
 .edit{
     position:absolute;

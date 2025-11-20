@@ -6,7 +6,6 @@
             <div class="field">
                 <div class = 'inputDiv' > 
                       <input id = 'input' name="input" v-model= "sourceName" placeholder="Enter Name of Video Input to add" type="text" required maxlength="10">
-                      <!-- <span class = "add"><i class="material-icons" v-on:click= "add">add</i></span> -->
                       <div class = "add waves-light " @click = "add()"><i class="material-icons waves-effect left">add</i>Add Input</div>
                 </div>
             </div>
@@ -233,8 +232,6 @@ input[type=text]:focus{
     color: black;
     transform: scale(.8);
 }
-.rounded{
-  border-radius: 6px;
-}
+
 
 </style>
