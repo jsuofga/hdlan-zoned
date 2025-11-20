@@ -6,10 +6,11 @@
             <div class="field">
                 <div class = 'inputDiv' > 
                       <input id = 'input' name="input" v-model= "sourceName" placeholder="Enter Name of Video Input to add" type="text" required maxlength="10">
-                      <span class = "add"><i class="material-icons" v-on:click= "add">add</i></span>
+                      <!-- <span class = "add"><i class="material-icons" v-on:click= "add">add</i></span> -->
+                      <div class = "add waves-light " @click = "add()"><i class="material-icons waves-effect left">add</i>Add Input</div>
                 </div>
             </div>
-
+            <div v-if = "inputNameError != ''" class = 'red-text'>{{inputNameError}}</div>
           <div class = 'listDiv'>
                    <div class = "gridItem" v-for="(item,index) in localSourceNames" :key="index">
                       <label v-bind:for= "localSourceNames[index]">TX{{index+1}}</label>
@@ -61,29 +62,58 @@ export default {
           // 1. Create a local copy of the prop
           localSourceNames: [], // Use spread syntax for a shallow copy
           localsnmpStatus:{},
-          sourceName: '' // Initialize the input model
+          sourceName: '', // Initialize the input model
+          inputNameError: ''
         }
     },
     methods: {
       
       add(){
        
-        if(this.localsnmpStatus.txCount == 0){
-          // switch configured as RX only switch. 
-           this.localSourceNames.push(this.sourceName)
-           this.sourceName = ''
-        }else{
-           if(this.localSourceNames.length < this.localsnmpStatus.txCount){
-          
-           this.localSourceNames.push(this.sourceName)
-           this.sourceName = ''
-        //if inputs exceeds number of txPorts on switch
-          }else{
-            alert('Exceeded number of TX ports')
-            this.sourceName = ''
-          }
+       // Reset error message at the start of the attempt
+        this.inputNameError = '' 
+        
+        const name = this.sourceName.trim() // Trim whitespace (as discussed earlier)
+
+        // --- 1. Check for Empty Input ---
+        if (!name) {
+            this.inputNameError = 'Input name cannot be empty.'
+            this.sourceName = '' // Clear input
+            return
         }
 
+        // --- 2. Check for Duplicate Name (Case-insensitive) ---
+        // Maps existing names to lowercase, then checks if the new name (also lowercase) is included.
+        if (this.localSourceNames.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
+            this.inputNameError = `A video input named "${name}" already exists.`
+            this.sourceName = '' // Clear input
+            return
+        }
+        
+        // --- 3. Check for Max Limit ---
+        const maxTxCount = this.localsnmpStatus.txCount;
+
+        // If switch is TX/RX switch (txCount > 0)
+        if (maxTxCount > 0) {
+            if (this.localSourceNames.length < maxTxCount) {
+                // Success
+                this.localSourceNames.push(name)
+                this.sourceName = ''
+            } else {
+                // Limit exceeded
+                this.inputNameError = `Exceeded maximum of ${maxTxCount} available TX ports.`
+                this.sourceName = ''
+            }
+        
+        // If switch is configured as RX only switch (txCount == 0)
+        } else if (maxTxCount == 0) {
+            // Note: If maxTxCount is 0, typically you shouldn't be adding sources. 
+            // Since your original code allowed adding inputs here, we'll keep it, 
+            // but log a warning or suggest removing the ability to add inputs if txCount is 0.
+            this.inputNameError = 'Warning: Switch configured as RX-only, input limit not applied.'
+            this.localSourceNames.push(name)
+            this.sourceName = ''
+        }
       },
       trash(index){
         this.localSourceNames.splice(index,1)
@@ -188,8 +218,12 @@ input[type=text]:focus{
 .add{
     position:absolute;
     right: 10px;
-    top: 10px;
+    top: 10%;
     cursor: pointer;
+    color:white;
+    border-radius: 6px;
+    padding: 5px;
+    background-color:#2196f3
 }
 .trash{
     position:absolute;
@@ -198,6 +232,9 @@ input[type=text]:focus{
     cursor: pointer;
     color: black;
     transform: scale(.8);
+}
+.rounded{
+  border-radius: 6px;
 }
 
 </style>
