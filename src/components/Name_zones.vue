@@ -7,9 +7,10 @@
                 <!-- <label for="Video Input"></label> -->
                 <div class = 'inputDiv' > 
                       <input id = 'input' name="input" v-model= "zoneName" placeholder="Enter Name of Zone/Group " type="text" required maxlength="10">
-                      <span class = "add"><i class="material-icons" v-on:click= "add">add</i></span>
+                      <div class = "add waves-light " @click = "add()"><i class="material-icons waves-effect left">add</i>Add Zone</div>
                 </div>
             </div>
+            <div v-if = "zoneNameError != ''" class = 'red-text'>{{zoneNameError}}</div>
 
           <div class = 'listDiv'>
                    <div class = "gridItem" v-for="(item,index) in localZoneNames" :key="index">
@@ -76,21 +77,37 @@ export default {
           zoneName: '',
           localZoneNames: [],
           localZonesId: [],
-          localtvNames: []
+          localtvNames: [],
+          zoneNameError: ''
         }
     },
     methods: {
       add(){
-        //Check to make sure only maxium Zones created
-        if(this.localZoneNames.length < 8){
-          this.localZoneNames.push(this.zoneName)
-          this.zoneName = ''
-        //if zone exceed 8
-        }else{
-          alert('Max allowed zones is 8')
-          this.zoneName = ''
+        // Reset error message at the start of the attempt
+        this.zoneNameError = ''
+        const name = this.zoneName.trim()
+// --- 1. Check for Empty Input ---
+        if (!name) {
+            this.zoneNameError = 'Zone name cannot be empty.'
+            // Use Materialize toast for attention
+            return
         }
-      },
+        // --- 2. Check for Duplicate Name (Case-insensitive) ---
+        if (this.localZoneNames.map(n => n.toLowerCase()).includes(name.toLowerCase())) {
+            this.zoneNameError = `A zone named "${name}" already exists.`
+            return
+        }
+        // --- 3. Check for Max Limit (Existing Logic) ---
+        if(this.localZoneNames.length < 8){
+            this.localZoneNames.push(name) // Use the trimmed 'name'
+            this.zoneName = '' // Clear the input after successful addition
+        //if zone exceed 8
+        } else {
+            this.zoneNameError = 'Max allowed zones is 8'
+            this.zoneName = '' // Clear input
+        }
+    },
+    
       trash(index){
         this.localZoneNames.splice(index,1)
         //console.log(index)
@@ -204,8 +221,12 @@ input[type=text]:focus{
 .add{
     position:absolute;
     right: 10px;
-    top: 10px;
+    top: 10%;
     cursor: pointer;
+    color:white;
+    border-radius: 6px;
+    padding: 5px;
+    background-color:#2196f3
 }
 .trash{
     position:absolute;
@@ -214,6 +235,9 @@ input[type=text]:focus{
     cursor: pointer;
     color: black;
     transform: scale(.8);
+}
+.rounded{
+  border-radius: 6px;
 }
 
 </style>
