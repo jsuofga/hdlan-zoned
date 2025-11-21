@@ -1,0 +1,298 @@
+[
+    {
+        "id": "9dab65b0.c320d8",
+        "type": "tab",
+        "label": "Timer-PoE",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "cf87035d.d3f2e",
+        "type": "schedex",
+        "z": "9dab65b0.c320d8",
+        "name": "PoE Timer ",
+        "passthroughunhandled": false,
+        "suspended": false,
+        "lat": "",
+        "lon": "",
+        "ontime": "",
+        "ontopic": "",
+        "onpayload": "poe-on",
+        "onoffset": 0,
+        "onrandomoffset": 0,
+        "offtime": "",
+        "offtopic": "",
+        "offpayload": "poe-off",
+        "offoffset": 0,
+        "offrandomoffset": 0,
+        "mon": true,
+        "tue": true,
+        "wed": true,
+        "thu": true,
+        "fri": true,
+        "sat": true,
+        "sun": true,
+        "x": 1030,
+        "y": 320,
+        "wires": [
+            [
+                "97321985.0a0fb8",
+                "d6a06179.14aef"
+            ]
+        ]
+    },
+    {
+        "id": "97321985.0a0fb8",
+        "type": "debug",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 1250,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "5630801d.b53cf",
+        "type": "debug",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 990,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c4c77c0b.c6428",
+        "type": "http in",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "url": "/timer/poe",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 220,
+        "wires": [
+            [
+                "7fdd13a8.2fceec"
+            ]
+        ]
+    },
+    {
+        "id": "afdffe7a.a0b64",
+        "type": "file in",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "filename": "/home/pi/octava/public/UserSwitchConfig.txt",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 430,
+        "y": 320,
+        "wires": [
+            [
+                "b90273a4.7c867"
+            ]
+        ]
+    },
+    {
+        "id": "b90273a4.7c867",
+        "type": "json",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 670,
+        "y": 320,
+        "wires": [
+            [
+                "1508e008.95c45",
+                "c2c1881a5aac1ccf"
+            ]
+        ]
+    },
+    {
+        "id": "1508e008.95c45",
+        "type": "function",
+        "z": "9dab65b0.c320d8",
+        "name": "set(ontime,offtime)",
+        "func": "\nglobal.set('ontime',msg.payload.onTime);\nglobal.set('offtime',msg.payload.offTime);\n\nmsg.payload = {'ontime':global.get('ontime'),'offtime': global.get('offtime')}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 320,
+        "wires": [
+            [
+                "cf87035d.d3f2e",
+                "5630801d.b53cf"
+            ]
+        ]
+    },
+    {
+        "id": "7fdd13a8.2fceec",
+        "type": "delay",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "outputs": 1,
+        "x": 180,
+        "y": 320,
+        "wires": [
+            [
+                "afdffe7a.a0b64",
+                "b7724d3a83bcd764"
+            ]
+        ]
+    },
+    {
+        "id": "d6a06179.14aef",
+        "type": "function",
+        "z": "9dab65b0.c320d8",
+        "name": "send poe command to node red",
+        "func": "\nlet server_url = `http://${global.get('NodeRedIPAddress')}:1880`\n\nif(msg.payload == 'poe-on'){\n   \n    msg.url = `${server_url}/poe/on`\n\n}else if(msg.payload == 'poe-off'){\n    \n    msg.url = `${server_url}/poe/off`\n    \n}else{\n    msg.url = null\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 460,
+        "wires": [
+            [
+                "cfc34ecd.ad0de",
+                "ae9c828.0aec58"
+            ]
+        ]
+    },
+    {
+        "id": "cfc34ecd.ad0de",
+        "type": "http request",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": false,
+        "url": "",
+        "tls": "",
+        "proxy": "",
+        "authType": "",
+        "x": 1270,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ae9c828.0aec58",
+        "type": "debug",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "url",
+        "targetType": "msg",
+        "x": 1240,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "b7724d3a83bcd764",
+        "type": "http response",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 290,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "c2c1881a5aac1ccf",
+        "type": "function",
+        "z": "9dab65b0.c320d8",
+        "name": "set( txCount, rxCount)",
+        "func": "\n\nglobal.set('txCount',msg.payload.TXports );\nglobal.set('rxCount',msg.payload.RXports);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2871055553296870",
+        "type": "http in",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "url": "/check_if_node_red_timer_poe_installed",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 230,
+        "y": 480,
+        "wires": [
+            [
+                "f79f0eb0864dbb3b"
+            ]
+        ]
+    },
+    {
+        "id": "f79f0eb0864dbb3b",
+        "type": "function",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "func": "msg.payload = 'node-red-timer-poe-installed'\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 480,
+        "wires": [
+            [
+                "c44f45707224af1f"
+            ]
+        ]
+    },
+    {
+        "id": "c44f45707224af1f",
+        "type": "http response",
+        "z": "9dab65b0.c320d8",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 710,
+        "y": 480,
+        "wires": []
+    }
+]

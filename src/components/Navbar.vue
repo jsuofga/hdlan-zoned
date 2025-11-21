@@ -47,7 +47,7 @@
                 <router-link to="/name-zones"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Zones/Groups</span> </li></router-link>
                 <router-link to="/name-inputs"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Video Inputs</span></li></router-link>
                 <router-link to="/name-outputs"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Video Outputs</span></li></router-link>
-                <router-link v-if ="/-.*p/i.test(snmpStatus.model)" to="/timer"><li @click= "closeModal2"><i class="material-icons blue-icon">alarm_add</i>Timer PoE On/Off <span></span></li></router-link>
+                <router-link v-if ="/-.*p/i.test(snmpStatus.model) && poe_timer_node_installed" to="/timer"><li @click= "closeModal2"><i class="material-icons blue-icon">alarm_add</i>Timer PoE On/Off <span></span></li></router-link>
                 <li @click= "savePreset(1)" ><router-link to=""><i class="material-icons blue-icon"> save</i><span>Save to Preset 1</span></router-link></li>
                 <li @click= "savePreset(2)" ><router-link to=""><i class="material-icons blue-icon">save</i><span>Save to Preset 2</span> </router-link></li>
                 <li @click= "savePreset(3)" ><router-link to=""><i class="material-icons blue-icon">save</i><span>Save to Preset 3</span> </router-link></li>
@@ -78,6 +78,7 @@ export default {
             showZoneTitle: false,
             modalInstance1: null, // Holds the Materialize instance for modal1
             modalInstance2: null, // Holds the Materialize instance for modal2
+            poe_timer_node_installed: false
         }
     },
     watch:{
@@ -150,6 +151,33 @@ export default {
             this.$router.push({ name: `zone1`})  //a hack. forces route to change to zone 1 ->home to force a re-read of server
             this.$router.push({ name: `home`})
         }
+
+    },
+    created(){
+        // Use an arrow function to maintain 'this' context
+        // send api request to Octava Controller to see if the Controller has the updated 'Timer_PoE' flow installed. 
+        const get_check_if_node_red_timer_poe_installed = async () => {
+               const serverURL = `${location.hostname}:1880`
+                try {
+                const response = await fetch(`http://${serverURL}/check_if_node_red_timer_poe_installed`);
+
+                if (!response.ok) {
+                // Throw an error if the status is not ok (e.g., 404, 500)
+                throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                // 2. Await the response.text() call to read the body content
+                const message = await response.text();
+                    if (message === 'node-red-timer-poe-installed') {
+                        this.poe_timer_node_installed = true; 
+                    } else {
+                        this.poe_timer_node_installed = false;
+                    }
+                } catch (error) {
+                    console.error("Fetch failed:", error);
+                }
+        }
+
+        get_check_if_node_red_timer_poe_installed();
 
     },
     mounted(){
