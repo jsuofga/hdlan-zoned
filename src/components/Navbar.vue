@@ -102,9 +102,10 @@
             </div>
             
             <div class="col s3">
-                    <router-link 
-                        to= '/timer' 
-                        @click="/-.*p/i.test(snmpStatus.model) && poe_timer_node_installed ? closeModal2 : null"
+
+                       <router-link 
+                        to= "/timer" 
+                        @click.native= "closeModal2"
                         :class="{'disabled-link': !/-.*p/i.test(snmpStatus.model) || !poe_timer_node_installed}"
                     >
                         <div class="setting-card waves-effect waves-light">
