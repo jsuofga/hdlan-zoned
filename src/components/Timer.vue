@@ -4,20 +4,6 @@
       <h4 class = 'white-text'>Server Time is {{snmpStatus.serverTime}}</h4>
 
       <div  class = 'card-container'>
-          <!-- <div class="card blue-grey darken-1">
-            <div class="card-content white-text">
-              <span class="card-title">PoE On Time</span>
-              <h4 v-if= "snmpStatus.ontime ==''" class = 'white-text center-align'>None</h4>
-              <h4  class = 'green-text center-align'>{{snmpStatus.ontime}}</h4>
-
-            </div>
-            <div class="card-action">
-                <div id = 'onTime'>
-                  <i class="material-icons prefix" style="color:white">alarm_on</i>
-                  <input  type="text" class="timepicker" v-model.lazy= 'onTime'  placeholder="Change Power PoE ON time">
-                </div>
-            </div>
-          </div> -->
           <div class="card blue-grey darken-1 card-relative">
             <i class="material-icons white-text card-close-btn" @click="closeCard()">close</i>
             <div class="white-text">
@@ -142,11 +128,12 @@ export default {
       
       
   },
-  created(){
-
-  },
+   created(){
+       
+    },
    mounted(){
         M.AutoInit() // For Materialize to work!
+
   }
 
 }

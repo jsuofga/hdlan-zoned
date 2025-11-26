@@ -14,7 +14,7 @@
              <span v-if= "snmpStatus.SwitchPingTest === 'fail'" class="new badge red" data-badge-caption="switch not detected!"></span>
              <span v-if= "pingControllerStatus === 'fail'" class="new badge red" data-badge-caption="HDLAN Controller not detected!"></span>
              <!-- <span v-if= "snmpStatus.PoE === 0 " class="new badge red" data-badge-caption="No PoE Power"></span> -->
-            <span class="right">AVLAN 112025&nbsp;&nbsp;</span>
+            <span class="right">AVLAN 112625&nbsp;&nbsp;</span>
         </div>
     </nav>
 
@@ -23,44 +23,123 @@
 
             <br>
             <h5 id='admin-settings-title' class = 'center-align'>Admin Access</h5>
-            <small  class = 'center-align'>
-                Be fair. The HDLAN Controller Software is licensed, not sold, to you solely for use with the Octava Video Over IP System.
-                You may not publish, copy,any portion of the Software,unless otherwise permitted by law.
-            </small>
+            <div style="padding: 0 20px;">
+                <small class='small-text'>
+                    Be fair. The Octava Controller Software is licensed, not sold, to you solely for use with the Octava Video Over IP System.
+                    You may not publish, copy, any portion of the Software, unless otherwise permitted by law.
+                </small>
+        </div>
             <div class="modal-content-admin">
                 <label for="admin"></label>
                 <i class="material-icons prefix blue-icon">persons</i>
                 <input name="admin" v-model= "admin" placeholder="Enter admin password" type="text" required autocomplete="off" >
             </div>
 
-            <div class=" modal-content-settings ">
+            <div class=" center-align">
                 <a @click= "closeModal1" class="modal-close waves-effect waves-light btn red">Cancel</a>
                 <a @click= "submit" class="modal-close waves-effect waves-light btn blue ">Submit</a>
             </div>
     </div>
 
-    <div id="modal2" class="modal">
-        <i class="material-icons red-text card-close-btn" @click= "closeModal2">close</i>
-        <div class="modal-content-settings center-align ">
-            <ul class = "center-align">
-                <router-link to="/ipaddress"><li @click= "closeModal2('synch')"><i class="material-icons blue-icon">router</i><span>Sync Switch</span></li></router-link>
-                <router-link to="/name-zones"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Zones/Groups</span> </li></router-link>
-                <router-link to="/name-inputs"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Video Inputs</span></li></router-link>
-                <router-link to="/name-outputs"><li @click= "closeModal2"><i class="material-icons blue-icon">edit</i><span>Video Outputs</span></li></router-link>
-                <router-link v-if ="/-.*p/i.test(snmpStatus.model) && poe_timer_node_installed" to="/timer"><li @click= "closeModal2"><i class="material-icons blue-icon">alarm_add</i>Timer PoE On/Off <span></span></li></router-link>
-                <li @click= "savePreset(1)" ><router-link to=""><i class="material-icons blue-icon"> save</i><span>Save to Preset 1</span></router-link></li>
-                <li @click= "savePreset(2)" ><router-link to=""><i class="material-icons blue-icon">save</i><span>Save to Preset 2</span> </router-link></li>
-                <li @click= "savePreset(3)" ><router-link to=""><i class="material-icons blue-icon">save</i><span>Save to Preset 3</span> </router-link></li>
-                <router-link to="/itach"><li @click= "closeModal2"><i class="material-icons blue-icon">router</i><span>Global Cache Itach</span> </li></router-link>
-                <router-link to="/favoritechannels"><li @click= "closeModal2"><i class="material-icons blue-icon">settings_remote</i><span>Channels Favorite</span> </li></router-link>
-                <!-- <router-link to="/multiviewer"><li @click= "closeModal2"><i class="material-icons blue-icon">border_all</i><span>MultiViewer</span> </li></router-link> -->
-                <router-link to="/update"><li @click= "closeModal2"><i class="material-icons blue-icon">publish</i>Update Software<span></span></li></router-link>
 
-            </ul>
+<div id="modal2" class="modal">
+    <i class="material-icons red-text card-close-btn" @click= "closeModal2">close</i>
+    <div class="modal-content-settings center-align ">
+        
+        <h5 class='center-align  text-darken-3'>System Settings & Presets</h5>
+        <div class="row settings-grid">
+            
+            <div class="col s3">
+                <router-link to="/ipaddress" @click.native="closeModal2('synch')">
+                    <div class="setting-card waves-effect waves-light">
+                        <i class="material-icons small blue-icon">router</i>
+                        <span class="card-text">Sync Switch</span>
+                    </div>
+                </router-link>
+            </div>
+            <div class="col s3">
+                <router-link to="/name-zones" @click.native="closeModal2">
+                    <div class="setting-card waves-effect waves-light">
+                        <i class="material-icons small blue-icon">edit</i>
+                        <span class="card-text">Zones/Groups</span>
+                    </div>
+                </router-link>
+            </div>
+            <div class="col s3">
+                <router-link to="/name-inputs" @click.native="closeModal2">
+                    <div class="setting-card waves-effect waves-light">
+                        <i class="material-icons small blue-icon">edit</i>
+                        <span class="card-text">Video Inputs</span>
+                    </div>
+                </router-link>
+            </div>
+            <div class="col s3">
+                <router-link to="/name-outputs" @click.native="closeModal2">
+                    <div class="setting-card waves-effect waves-light">
+                        <i class="material-icons small blue-icon">edit</i>
+                        <span class="card-text">Video Outputs</span>
+                    </div>
+                </router-link>
+            </div>
+            
+            <div class="col s4">
+                <div class="setting-card waves-effect waves-light" @click="savePreset(1); closeModal2()">
+                    <i class="material-icons small blue-icon">save</i>
+                    <span class="card-text">Save Preset 1</span>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="setting-card waves-effect waves-light" @click="savePreset(2); closeModal2()">
+                    <i class="material-icons small blue-icon">save</i>
+                    <span class="card-text">Save Preset 2</span>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="setting-card waves-effect waves-light" @click="savePreset(3); closeModal2()">
+                    <i class="material-icons small blue-icon">save</i>
+                    <span class="card-text">Save Preset 3</span>
+                </div>
+            </div>
+            
+            <div class="col s3">
+                    <router-link 
+                        to= '/timer' 
+                        @click="/-.*p/i.test(snmpStatus.model) && poe_timer_node_installed ? closeModal2 : null"
+                        :class="{'disabled-link': !/-.*p/i.test(snmpStatus.model) || !poe_timer_node_installed}"
+                    >
+                        <div class="setting-card waves-effect waves-light">
+                            <i class="material-icons small blue-icon">alarm_add</i>
+                            <span class="card-text">Timer PoE On/Off</span>
+                        </div>
+                    </router-link>
+            </div>
+            <div class="col s3">
+                <router-link to="/itach" @click.native="closeModal2">
+                    <div class="setting-card waves-effect waves-light">
+                        <i class="material-icons small blue-icon">router</i>
+                        <span class="card-text">Global Cache Itach</span>
+                    </div>
+                </router-link>
+            </div>
+            <div class="col s3">
+                <router-link to="/favoritechannels" @click.native="closeModal2">
+                    <div class="setting-card waves-effect waves-light">
+                        <i class="material-icons small blue-icon">settings_remote</i>
+                        <span class="card-text">Channels Favorite</span>
+                    </div>
+                </router-link>
+            </div>
+            <div class="col s3">
+                <router-link to="/update" @click.native="closeModal2">
+                    <div class="setting-card waves-effect waves-light">
+                        <i class="material-icons small blue-icon">publish</i>
+                        <span class="card-text">Update Software</span>
+                    </div>
+                </router-link>
+            </div>
         </div>
-
     </div>
-
+</div>
 
 </div>
 
@@ -234,18 +313,6 @@ export default {
         display:flex;
         justify-content:space-evenly ;
         align-items: center ;
-
-    }
-    .modal-content-settings li{
-        margin:10px;
-        border:1px solid #2196f3 ;
-        border-radius:8px ;
-        padding-left:20px;
-        padding-right:20px;
-    }
-
-    li:hover {
-        background-color:lightskyblue
     }
 
     input[type=text]:focus{
@@ -261,4 +328,71 @@ export default {
         z-index: 1050; 
         cursor: pointer;
     }
-    </style>
+
+
+.modal-content-settings {
+    /* Retain original display flex properties if needed, but the inner grid will control alignment */
+    /* display: flex; 
+    justify-content:space-evenly ; 
+    align-items: center ; */
+    display: block; /* Change to block to allow row/col structure */
+    padding: 0 20px; /* Add horizontal padding */
+
+}
+
+.settings-grid {
+    margin-top: 20px; /* Space below the title */
+    display: flex; /* Ensure the row uses flex for equal column spacing */
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.settings-grid .col {
+    margin-bottom: 20px; /* Space between rows */
+    padding: 0 10px !important; /* Adjust column padding */
+}
+
+.setting-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 60px; /* Uniform height for cards */
+    padding: 15px 5px;
+    border: 1px solid #2196f3; /* Blue border */
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #f8f8f8; /* Light background for a card feel */
+    transition: background-color 0.2s;
+}
+
+.setting-card:hover {
+    background-color: lightskyblue; /* Hover effect */
+    border-color: #0d47a1; /* Darker border on hover */
+}
+
+.setting-card a {
+    text-decoration: none; /* Remove underline from router-links */
+    color: inherit;
+}
+
+.card-text {
+    font-size: 14px;
+    font-weight: 100;
+    margin-top: 5px;
+    color:black
+}
+
+.blue-icon {
+    color:#2196f3 !important;
+    padding: 0; /* Remove old padding */
+}
+.disabled-link {
+    /* Visually indicate that the link is inactive */
+    opacity: 0.6; /* Slight transparency */
+    cursor: not-allowed !important; /* Change cursor to 'no entry' sign */
+    pointer-events: none; /* Crucially prevents the actual click event from propagating */
+}
+
+</style>
